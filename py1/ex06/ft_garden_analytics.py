@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-"""Garden Analytics Platform."""
-
 
 class Plant:
     """Base class representing a plant."""

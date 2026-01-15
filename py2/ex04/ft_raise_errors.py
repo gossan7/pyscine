@@ -1,11 +1,20 @@
 #!/usr/bin/env python3
 
 class PlantError(Exception):
+    """
+    Exception raised when a plant name is invalid.
+    """
     def __init__(self):
         super().__init__("Plant name cannot be empty!")
 
 
 class WaterError(Exception):
+    """
+    Exception raised when the water level is outside the valid range.
+
+    Args:
+        water_level (int): The provided water level value.
+    """
     def __init__(self, water_level: int):
         too_high = f"Water level {water_level} is too high (max 10)"
         too_low = f"Water level {water_level} is too low (min 1)"
@@ -13,6 +22,13 @@ class WaterError(Exception):
 
 
 class SunlightError(Exception):
+    """
+    Exception raised when the sunlight exposure is outside
+    the acceptable range.
+
+    Args:
+        sunlight_hours (int): Number of sunlight hours provided.
+    """
     def __init__(self, sunlight_hours: int):
         too_high = f"Water level {sunlight_hours} is too high (max 12)"
         too_low = f"Water level {sunlight_hours} is too low (min 2)"
@@ -20,6 +36,26 @@ class SunlightError(Exception):
 
 
 def check_plant_health(plant_name: str, water_level: int, sunlight_hours: int):
+    """
+    Validate plant health conditions.
+
+    This function checks the plant name, water level,
+    and sunlight exposure. It raises specific custom
+    exceptions if any condition is invalid.
+
+    Args:
+        plant_name (str): Name of the plant.
+        water_level (int): Water level provided.
+        sunlight_hours (int): Hours of sunlight exposure.
+
+    Returns:
+        str: A confirmation message if all checks pass.
+
+    Raises:
+        PlantError: If the plant name is empty.
+        WaterError: If the water level is invalid.
+        SunlightError: If the sunlight hours are invalid.
+    """
     if len(plant_name) == 0:
         raise PlantError
     if water_level < 1 or water_level > 10:
@@ -30,6 +66,12 @@ def check_plant_health(plant_name: str, water_level: int, sunlight_hours: int):
 
 
 def test_plant_checks():
+    """
+    Test plant health validation with multiple scenarios.
+
+    This function demonstrates how different invalid
+    inputs trigger specific custom exceptions.
+    """
     print("=== Garden Plant Health Checker ===")
     tests = [("Testing with good values...", ["tomato", 5, 6]),
              ("Testing empty plant name...", ["", 5, 6]),

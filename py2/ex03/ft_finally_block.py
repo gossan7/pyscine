@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 
 def water_plants(plant_list: list):
+    """
+    Simulate watering a list of plants.
+
+    This function attempts to water each plant in the provided list.
+    It demonstrates the use of try, except, and finally blocks to
+    handle errors and ensure cleanup operations are always executed.
+
+    Args:
+        plant_list (list): A list containing plant identifiers.
+
+    Returns:
+        bool: True if watering completes successfully, False otherwise.
+    """
     print("Opening watering system")
     try:
         for plant in plant_list:
@@ -15,6 +28,12 @@ def water_plants(plant_list: list):
 
 
 def test_watering_system():
+    """
+    Test the garden watering system with valid and invalid plant lists.
+
+    This function demonstrates how the watering system behaves
+    during normal operation and when an error occurs.
+    """
     print("=== Garden Watering System ===")
     valid_plant_list = ["tomato", "lettuce", "carrots"]
     invalid_plant_list = ["tomato", None]
