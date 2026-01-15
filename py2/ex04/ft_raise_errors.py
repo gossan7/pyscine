@@ -4,8 +4,14 @@ class PlantError(Exception):
     """
     Exception raised when a plant name is invalid.
     """
-    def __init__(self):
-        super().__init__("Plant name cannot be empty!")
+    def __init__(self, plant):
+        if not isinstance(plant, str):
+            msg = "Plant name has to be a string!"
+        elif len(str) == 0:
+            msg = "Plant name cannot be empty!"
+        else:
+            msg = "Plant error!"
+        super().__init__(msg)
 
 
 class WaterError(Exception):
@@ -30,8 +36,8 @@ class SunlightError(Exception):
         sunlight_hours (int): Number of sunlight hours provided.
     """
     def __init__(self, sunlight_hours: int):
-        too_high = f"Water level {sunlight_hours} is too high (max 12)"
-        too_low = f"Water level {sunlight_hours} is too low (min 2)"
+        too_high = f"Sunlight level {sunlight_hours} is too high (max 12)"
+        too_low = f"Sunlight level {sunlight_hours} is too low (min 2)"
         super().__init__(too_high if sunlight_hours > 12 else too_low)
 
 

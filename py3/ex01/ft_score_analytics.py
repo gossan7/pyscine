@@ -3,6 +3,13 @@ import sys
 
 
 def main():
+    """
+    Analyze player scores provided as command-line arguments.
+
+    This function reads integer scores from the command line,
+    calculates basic statistics (total, average, highest,
+    lowest, and range), and displays the results.
+    """
     print("=== Player Score Analytics ===")
     players = len(sys.argv) - 1
     if players == 0:
