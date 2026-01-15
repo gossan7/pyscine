@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 
 class Factory:
-    
+    def __init__(self):
+        self.plants = []
+
+    def create_plants(self, args: tuple) -> list:
+        self.plants = []
+        for arg in args:
+            self.plants.append(Plant(*arg))
+        return self.plants
+
 
 class Plant:
     """Represents a plant with name, height, and age."""
@@ -25,15 +33,13 @@ class Plant:
 
 def main():
     print("=== Plant Factory Output ===")
-    plants = [Plant("Rose", 25, 30),
-              Plant("Oak", 200, 365),
-              Plant("Cactus", 15, 120),
-              Plant("Sunflower", 80, 45),
-              Plant("Fern", 15, 120)]
-    lenght = 0
-    for _ in plants:
-        lenght += 1
-    print("\nTotal plants created:", lenght)
+    facto = Factory()
+    plants = [facto.create_plants(("Rose", 25, 30),
+              ("Oak", 200, 365),
+              ("Cactus", 15, 120),
+              ("Sunflower", 80, 45),
+              ("Fern", 15, 120))]
+    print("\nTotal plants created:", len(plants))
 
 
 if __name__ == "__main__":
