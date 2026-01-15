@@ -7,7 +7,7 @@ class PlantError(Exception):
     def __init__(self, plant):
         if not isinstance(plant, str):
             msg = "Plant name has to be a string!"
-        elif len(str) == 0:
+        elif len(plant) == 0:
             msg = "Plant name cannot be empty!"
         else:
             msg = "Plant error!"
@@ -36,8 +36,8 @@ class SunlightError(Exception):
         sunlight_hours (int): Number of sunlight hours provided.
     """
     def __init__(self, sunlight_hours: int):
-        too_high = f"Sunlight level {sunlight_hours} is too high (max 12)"
-        too_low = f"Sunlight level {sunlight_hours} is too low (min 2)"
+        too_high = f"Sunlight hours {sunlight_hours} is too high (max 12)"
+        too_low = f"Sunlight hours {sunlight_hours} is too low (min 2)"
         super().__init__(too_high if sunlight_hours > 12 else too_low)
 
 
@@ -63,7 +63,7 @@ def check_plant_health(plant_name: str, water_level: int, sunlight_hours: int):
         SunlightError: If the sunlight hours are invalid.
     """
     if len(plant_name) == 0:
-        raise PlantError
+        raise PlantError(plant_name)
     if water_level < 1 or water_level > 10:
         raise WaterError(water_level)
     if sunlight_hours < 2 or sunlight_hours > 12:
@@ -89,7 +89,7 @@ def test_plant_checks():
             print(check_plant_health(*args))
         except Exception as e:
             print(f"Error: {e}")
-    print("\nAll error raisong tests completed!")
+    print("\nAll error raising tests completed!")
 
 
 if __name__ == "__main__":

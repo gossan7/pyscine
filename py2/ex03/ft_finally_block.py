@@ -41,7 +41,7 @@ def test_watering_system():
     water_plants(valid_plant_list)
     print("\nTesting with error...")
     water_plants(invalid_plant_list)
-    print("\nCleanup alway happens, even with errors")
+    print("\nCleanup always happens, even with errors!")
 
 
 if __name__ == "__main__":

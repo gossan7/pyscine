@@ -22,10 +22,10 @@ def garden_operations(flag="All"):
         case "ZeroDivisionError":
             42 / 0
         case "FileNotFoundError":
-            open("inexistent_file")
+            open("missing.txt")
         case "KeyError":
             dictionnary = {"key": "value"}
-            dictionnary["inexistent_key"]
+            dictionnary["missing_plant"]
         case "All":
             int("abc")
             42 / 0
@@ -61,7 +61,7 @@ def test_error_types():
     except (ValueError, ZeroDivisionError,
             FileNotFoundError, KeyError):
         print("Caught an error, but program continues!")
-    print("\nAll error types tested successfully")
+    print("\nAll error types tested successfully!")
 
 
 if __name__ == "__main__":

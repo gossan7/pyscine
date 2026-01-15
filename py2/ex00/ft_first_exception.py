@@ -42,6 +42,8 @@ def test_temperature_input():
     for test in tests:
         print(f"\nTesting temperature: {test}")
         check_temperature(test)
+    print()
+    print("All tests completed - program didn't crash!")
 
 
 if __name__ == "__main__":
