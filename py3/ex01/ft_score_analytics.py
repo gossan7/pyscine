@@ -21,6 +21,7 @@ def main():
     except Exception as e:
         print(f"Error in args: {e}")
         return
+    print(f"Scores processed: {scores}")
     print(f"Total players: {players}")
     print(f"Total score: {sum(scores)}")
     print(f"Average score: {sum(scores) / players:.1f}")

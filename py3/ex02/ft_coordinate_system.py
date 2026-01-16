@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import sys
 import math
 
 
@@ -16,6 +15,33 @@ def print_pos(x: int, y: int, z: int):
     print(f"Coordinates: X={x}, Y={y}, Z={z}")
 
 
+def parse_coordinates(coordinates_string: str):
+    """
+    Parse a player's coordinate string.
+
+    Args:
+        coordinates_string (str): coordinates string separated by a comma.
+    """
+    coordinates = tuple(map(int, coordinates_string.split(",")))
+    return coordinates
+
+
+def calc_distance(base: tuple[int, int, int], pos: tuple[int, int, int]):
+    """
+    Calculate distance between two 3D points (coordinates)
+
+    Args:
+        base (tuple): base position (usually (0, 0, 0))
+        pos (tuple): player's position
+    """
+    distance = math.sqrt(
+        (base[0] - pos[0]) ** 2 +
+        (base[1] - pos[1]) ** 2 +
+        (base[2] - pos[2]) ** 2
+    )
+    return distance
+
+
 def main():
     """
     Parse command-line arguments and compute 3D coordinates.
@@ -26,48 +52,46 @@ def main():
     origin, and demonstrates tuple unpacking.
     """
     print("=== Game Coordinate System ===\n")
-    size = len(sys.argv)
 
-    if size == 2:
-        args = sys.argv[1].split(" ")
-        if len(args) != 3:
-            print(
-                "Invalid args. Usage: python3 ft_coordinate_system.py x y z"
-                " / \"x y z\""
-            )
-    elif size == 4:
-        args = sys.argv[1:]
-    else:
-        print(
-            "Invalid args. Usage: python3 ft_coordinate_system.py x y z"
-            " / \"x y z\""
-        )
-        return
+    base_coordinates = (0, 0, 0)
+
+    valid_coordinates = (10, 20, 5)
+    print(f"Position created: {valid_coordinates}")
+    print(f"Distance between {base_coordinates} and {valid_coordinates}:",
+          f"{calc_distance(base_coordinates, valid_coordinates):.2f}")
+    print()
+
+    valid_coordinates_str = "3,4,0"
+    invalid_coordinates_str = "abc,def,ghi"
 
     try:
-        print(f"Parsing coordinates: {args}")
-        new_pos = tuple(int(arg) for arg in args)
+        print(f"Parsing coordinates: \"{valid_coordinates_str}\"")
+
+        pos1 = parse_coordinates(valid_coordinates_str)
+        print(f"Parsed position: {pos1}")
+        print(f"Distance between {base_coordinates} and {pos1}:",
+              f"{calc_distance(base_coordinates, pos1):.1f}")
+        print()
+
+        print(f"Parsing invalid coordinates: \"{invalid_coordinates_str}\"")
+
+        pos2 = parse_coordinates(invalid_coordinates_str)
+        print(f"Parsed position: {pos2}")
+        print(f"Distance between {base_coordinates} and {pos2}:",
+              f"{calc_distance(base_coordinates, pos2):.1f}")
+        print()
+
     except Exception as e:
         print(f"Error parsing coordinates: {e}")
         print(
             f"Error details - Type: {e.__class__.__name__}, "
-            f"Args: (\"{e}\")"
+            f"Args: ({repr(str(e))},)"
         )
-        return
-
-    print(f"Parsed position: {new_pos}")
-    base_pos = (0, 0, 0)
-
-    distance = math.sqrt(
-        (base_pos[0] - new_pos[0]) ** 2 +
-        (base_pos[1] - new_pos[1]) ** 2 +
-        (base_pos[2] - new_pos[2]) ** 2
-    )
-
-    print(f"Distance between {base_pos} ans {new_pos}: {distance:.2f}\n")
+        print()
 
     print("Unpacking demonstration:")
-    print_pos(*new_pos)
+    pos1 = (3, 4, 0)
+    print_pos(*pos1)
 
 
 if __name__ == "__main__":
