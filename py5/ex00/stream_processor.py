@@ -7,7 +7,8 @@ from abc import ABC, abstractmethod
 class DataProcessor(ABC):
     """
     Abstract base class defining a common interface for all data processors.
-    Subclasses must implement validation and processing logic for their data type.
+    Subclasses must implement validation and processing
+    logic for their data type.
     """
 
     @abstractmethod
