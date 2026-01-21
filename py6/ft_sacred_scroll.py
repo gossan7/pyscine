@@ -1,7 +1,15 @@
+#!/usr/bin/env python3
+
 import alchemy
 
 
 def main():
+    """
+    Run the sacred scroll demonstration.
+
+    Tests direct module access, package-level access controlled by
+    __init__.py, and displays package metadata.
+    """
     print("=== Sacred Scroll Mastery ===\n")
 
     print("Testing direct module access:")
