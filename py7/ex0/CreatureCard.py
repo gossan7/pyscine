@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from typing import Dict, Union
-from . import Card, CardError, Infos, GameState, Play, Attack
+from . import Card, CardError, Info, GameState, Play, Attack
 
 
 class CreatureCard(Card):
@@ -25,9 +25,9 @@ class CreatureCard(Card):
         if health <= 0:
             raise CardError(f"Health must be positive: {health}")
 
-        self.infos[Infos.TYPE.value] = "Creature"
-        self.infos[Infos.ATTACK.value] = attack
-        self.infos[Infos.HEALTH.value] = health
+        self.infos[Info.TYPE.value] = "Creature"
+        self.infos[Info.ATTACK.value] = attack
+        self.infos[Info.HEALTH.value] = health
 
     def play(self, game_state: Dict) -> Dict:
         """
@@ -45,11 +45,11 @@ class CreatureCard(Card):
             raise CardError("Not enough mana available")
 
         game_state[GameState.AVAILABLE_MANA.value] \
-            -= self.infos[Infos.COST.value]
+            -= self.infos[Info.COST.value]
 
         return {
-            Play.CARD_PLAYED.value: self.infos[Infos.NAME.value],
-            Play.MANA_USED.value: self.infos[Infos.COST.value],
+            Play.CARD_PLAYED.value: self.infos[Info.NAME.value],
+            Play.MANA_USED.value: self.infos[Info.COST.value],
             Play.EFFECT.value: "Creature summoned to battlefield"
         }
 
@@ -63,17 +63,17 @@ class CreatureCard(Card):
         :return: Combat resolution details
         """
         try:
-            target[Infos.HEALTH.value] -= self.infos[Infos.ATTACK.value]
+            target[Info.HEALTH.value] -= self.infos[Info.ATTACK.value]
         except KeyError:
             raise CardError("Invalid target for attack")
 
-        if target[Infos.HEALTH.value] <= 0:
-            target[Infos.HEALTH.value] = 0
+        if target[Info.HEALTH.value] <= 0:
+            target[Info.HEALTH.value] = 0
             game_state[GameState.AVAILABLE_MANA.value] += 2
 
         return {
-            Attack.ATTACKER.value: self.infos[Infos.NAME.value],
-            Attack.TARGET.value: target[Infos.NAME.value],
-            Attack.DAMAGE_DEALT.value: self.infos[Infos.ATTACK.value],
-            Attack.COMBAT_RESOLVED.value: target[Infos.HEALTH.value] == 0
+            Attack.ATTACKER.value: self.infos[Info.NAME.value],
+            Attack.TARGET.value: target[Info.NAME.value],
+            Attack.DAMAGE_DEALT.value: self.infos[Info.ATTACK.value],
+            Attack.COMBAT_RESOLVED.value: target[Info.HEALTH.value] == 0
         }

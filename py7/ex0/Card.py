@@ -5,7 +5,7 @@ from typing import Dict
 from enum import Enum
 
 
-class Infos(Enum):
+class Info(Enum):
     """Keys used to describe card information."""
     NAME = "name"
     COST = "cost"
@@ -52,9 +52,9 @@ class Card(ABC):
         :param rarity: Rarity of the card
         """
         self.infos = {
-            Infos.NAME.value: name,
-            Infos.COST.value: cost,
-            Infos.RARITY.value: rarity
+            Info.NAME.value: name,
+            Info.COST.value: cost,
+            Info.RARITY.value: rarity
         }
 
     @abstractmethod
@@ -82,4 +82,4 @@ class Card(ABC):
         :param avaliable_mana: Amount of available mana
         :return: True if playable, False otherwise
         """
-        return avaliable_mana >= self.infos[Infos.COST.value]
+        return avaliable_mana >= self.infos[Info.COST.value]

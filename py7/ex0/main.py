@@ -1,4 +1,4 @@
-from ex0 import CreatureCard, Infos, GameState
+from ex0 import CreatureCard, Info, GameState
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
     print()
 
     print(
-        f"Playing {fire_dragon_infos[Infos.NAME.value]}",
+        f"Playing {fire_dragon_infos[Info.NAME.value]}",
         f"with {game_state[GameState.AVAILABLE_MANA.value]} mana available:"
     )
     print(
@@ -45,8 +45,8 @@ def main():
     goblin_warrior_infos = goblin_warrior.get_card_info()
 
     print(
-        f"{fire_dragon_infos[Infos.NAME.value]} attacks",
-        f"{goblin_warrior_infos[Infos.NAME.value]}:"
+        f"{fire_dragon_infos[Info.NAME.value]} attacks",
+        f"{goblin_warrior_infos[Info.NAME.value]}:"
     )
 
     print(
