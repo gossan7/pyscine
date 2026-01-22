@@ -51,7 +51,7 @@ class Card(ABC):
         :param cost: Mana cost of the card
         :param rarity: Rarity of the card
         """
-        self.infos = {
+        self.info = {
             CardInfo.NAME.value: name,
             CardInfo.COST.value: cost,
             CardInfo.RARITY.value: rarity
@@ -73,7 +73,7 @@ class Card(ABC):
 
         :return: Dictionary containing card attributes
         """
-        return self.infos
+        return self.info
 
     def is_playable(self, avaliable_mana: int) -> bool:
         """
@@ -82,4 +82,4 @@ class Card(ABC):
         :param avaliable_mana: Amount of available mana
         :return: True if playable, False otherwise
         """
-        return avaliable_mana >= self.infos[CardInfo.COST.value]
+        return avaliable_mana >= self.info[CardInfo.COST.value]

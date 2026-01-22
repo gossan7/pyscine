@@ -32,9 +32,9 @@ class CreatureCard(Card):
         if health <= 0:
             raise CardError(f"Health must be positive: {health}")
 
-        self.infos[CardInfo.TYPE.value] = "Creature"
-        self.infos[CreatureInfo.ATTACK.value] = attack
-        self.infos[CreatureInfo.HEALTH.value] = health
+        self.info[CardInfo.TYPE.value] = "Creature"
+        self.info[CreatureInfo.ATTACK.value] = attack
+        self.info[CreatureInfo.HEALTH.value] = health
 
     def play(self, game_state: Dict) -> Dict:
         """
@@ -52,11 +52,11 @@ class CreatureCard(Card):
             raise CardError("Not enough mana available")
 
         game_state[GameState.AVAILABLE_MANA.value] \
-            -= self.infos[CardInfo.COST.value]
+            -= self.info[CardInfo.COST.value]
 
         return {
-            Play.CARD_PLAYED.value: self.infos[CardInfo.NAME.value],
-            Play.MANA_USED.value: self.infos[CardInfo.COST.value],
+            Play.CARD_PLAYED.value: self.info[CardInfo.NAME.value],
+            Play.MANA_USED.value: self.info[CardInfo.COST.value],
             Play.EFFECT.value: "Creature summoned to battlefield"
         }
 
@@ -71,7 +71,7 @@ class CreatureCard(Card):
         """
         try:
             target[CreatureInfo.HEALTH.value] \
-                -= self.infos[CreatureInfo.ATTACK.value]
+                -= self.info[CreatureInfo.ATTACK.value]
         except KeyError:
             raise CardError("Invalid target for attack")
 
