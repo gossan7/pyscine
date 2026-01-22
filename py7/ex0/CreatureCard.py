@@ -1,7 +1,14 @@
 #!/usr/bin/env python3
 
 from typing import Dict, Union
-from . import Card, CardError, Info, GameState, Play, Attack
+from . import Card, CardError, CardInfo, GameState, Play, Attack
+from enum import Enum
+
+
+class CreatureInfo(Enum):
+    """Keys used to describe creature card information."""
+    ATTACK = "attack"
+    HEALTH = "health"
 
 
 class CreatureCard(Card):
@@ -25,9 +32,9 @@ class CreatureCard(Card):
         if health <= 0:
             raise CardError(f"Health must be positive: {health}")
 
-        self.infos[Info.TYPE.value] = "Creature"
-        self.infos[Info.ATTACK.value] = attack
-        self.infos[Info.HEALTH.value] = health
+        self.infos[CardInfo.TYPE.value] = "Creature"
+        self.infos[CreatureInfo.ATTACK.value] = attack
+        self.infos[CreatureInfo.HEALTH.value] = health
 
     def play(self, game_state: Dict) -> Dict:
         """
@@ -45,11 +52,11 @@ class CreatureCard(Card):
             raise CardError("Not enough mana available")
 
         game_state[GameState.AVAILABLE_MANA.value] \
-            -= self.infos[Info.COST.value]
+            -= self.infos[CardInfo.COST.value]
 
         return {
-            Play.CARD_PLAYED.value: self.infos[Info.NAME.value],
-            Play.MANA_USED.value: self.infos[Info.COST.value],
+            Play.CARD_PLAYED.value: self.infos[CardInfo.NAME.value],
+            Play.MANA_USED.value: self.infos[CardInfo.COST.value],
             Play.EFFECT.value: "Creature summoned to battlefield"
         }
 
@@ -63,17 +70,19 @@ class CreatureCard(Card):
         :return: Combat resolution details
         """
         try:
-            target[Info.HEALTH.value] -= self.infos[Info.ATTACK.value]
+            target[CreatureInfo.HEALTH.value] \
+                -= self.infos[CreatureInfo.ATTACK.value]
         except KeyError:
             raise CardError("Invalid target for attack")
 
-        if target[Info.HEALTH.value] <= 0:
-            target[Info.HEALTH.value] = 0
+        if target[CreatureInfo.HEALTH.value] <= 0:
+            target[CreatureInfo.HEALTH.value] = 0
             game_state[GameState.AVAILABLE_MANA.value] += 2
 
         return {
-            Attack.ATTACKER.value: self.infos[Info.NAME.value],
-            Attack.TARGET.value: target[Info.NAME.value],
-            Attack.DAMAGE_DEALT.value: self.infos[Info.ATTACK.value],
-            Attack.COMBAT_RESOLVED.value: target[Info.HEALTH.value] == 0
+            Attack.ATTACKER.value: self.infos[CardInfo.NAME.value],
+            Attack.TARGET.value: target[CardInfo.NAME.value],
+            Attack.DAMAGE_DEALT.value: self.infos[CreatureInfo.ATTACK.value],
+            Attack.COMBAT_RESOLVED.value:
+            target[CreatureInfo.HEALTH.value] == 0
         }
