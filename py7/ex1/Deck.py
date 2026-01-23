@@ -11,16 +11,8 @@ class DeckError(Exception):
         super().__init__(f"DeckError: {msg}")
 
 
-class ArtifactInfo(Enum):
-    DURABILITY = "durability"
-    EFFECT = "effect"
-
-
 class DeckInfo(Enum):
     TOTAL_CARDS = "total_cards"
-    CREATURES = "creatures"
-    SPELLS = "spells"
-    ARTIFACTS = "artifacts"
     AVG_COST = "avg_cost"
 
 
@@ -38,12 +30,26 @@ class Deck:
         type_key = card_info[CardInfo.TYPE.value].lower() + "s"
         self.stats.setdefault(type_key, 0)
         self.stats[type_key] += 1
+        self.stats[DeckInfo.AVG_COST.value] \
+            *= self.stats[DeckInfo.TOTAL_CARDS.value]
+        self.stats[DeckInfo.AVG_COST.value] += card_info[CardInfo.COST.value]
+        self.stats[DeckInfo.TOTAL_CARDS.value] += 1
+        self.stats[DeckInfo.AVG_COST.value] \
+            /= self.stats[DeckInfo.TOTAL_CARDS.value]
 
     def remove_card(self, card_name: str):
         found = False
         for i, card in enumerate(self.cards):
             card_info = card.get_card_info()
             if card_info[CardInfo.NAME.value] == card_name:
+                self.stats[DeckInfo.AVG_COST.value] \
+                    *= self.stats[DeckInfo.TOTAL_CARDS.value]
+                self.stats[DeckInfo.AVG_COST.value] \
+                    -= card_info[CardInfo.COST.value]
+                self.stats[DeckInfo.TOTAL_CARDS.value] -= 1
+                if self.stats[DeckInfo.TOTAL_CARDS.value]:
+                    self.stats[DeckInfo.AVG_COST.value] \
+                        /= self.stats[DeckInfo.TOTAL_CARDS.value]
                 self.cards.pop(i)
                 found = True
                 break
