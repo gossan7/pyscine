@@ -1,10 +1,24 @@
 #!/usr/bin/env python3
 
+"""
+Demonstration script for Exercise 1: Deck Builder.
+
+This script showcases the use of multiple concrete card types
+(Creature, Spell, Artifact) within a single Deck, demonstrating
+polymorphism through a shared Card interface.
+"""
+
 from . import Deck, CreatureCard, SpellCard, ArtifactCard, \
               CardInfo, SpellInfo, GameState
 
 
-def main():
+def main() -> None:
+    """
+    Entry point for the Deck Builder demonstration.
+
+    Creates a deck with different card types, displays deck statistics,
+    draws and plays each card, and highlights polymorphic behavior.
+    """
     print("=== DataDeck Deck Builder ===\n")
 
     print("Building deck with different card types...")
@@ -41,8 +55,10 @@ def main():
     for _ in range(3):
         card = deck.draw_card()
         card_info = card.get_card_info()
-        print(f"Drew: {card_info[CardInfo.NAME.value]}",
-              f"({card_info[CardInfo.TYPE.value]})")
+        print(
+            f"Drew: {card_info[CardInfo.NAME.value]}",
+            f"({card_info[CardInfo.TYPE.value]})"
+        )
         print(f"Play result: {card.play(game_state)}\n")
 
     print("Polymorphism in action: Same interface, different card behaviors!")
