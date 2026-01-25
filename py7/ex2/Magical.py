@@ -23,7 +23,7 @@ class Magical(ABC):
     """
 
     @abstractmethod
-    def cast_spell(self, spell_name: str, targets: List[str]) -> Dict:
+    def cast_spell(self, spell_name: str, targets: List[Dict]) -> Dict:
         """
         Cast a spell affecting one or more targets.
 

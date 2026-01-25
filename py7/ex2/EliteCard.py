@@ -2,7 +2,7 @@
 
 from typing import Dict, List
 from enum import Enum
-from ex0.Card import Card, CardInfo, GameState
+from . import Card, CardInfo, GameState, CreatureInfo
 from .Combatable import Combatable, Combat
 from .Magical import Magical, Magic
 
@@ -57,16 +57,22 @@ class EliteCard(Card, Combatable, Magical):
             "mana_used": self.info[CardInfo.COST.value]
         }
 
-    def attack(self, target: str) -> Dict:
+    def attack(self, target: Dict) -> Dict:
         """
         Attack a target using combat power.
 
         :param target: Target identifier
         :return: Dictionary describing the attack
         """
+        target[CreatureInfo.HEALTH.value] \
+            -= self.info[EliteInfo.ATTACK.value]
+
+        if target[CreatureInfo.HEALTH.value] < 0:
+            target[CreatureInfo.HEALTH.value] = 0
+
         return {
             Combat.ATTACKER.value: self.info[CardInfo.NAME.value],
-            Combat.TARGET.value: target,
+            Combat.TARGET.value: target[CardInfo.NAME.value],
             Combat.DAMAGE.value: self.info[EliteInfo.ATTACK.value],
             Combat.COMBAT_TYPE.value: "melee"
         }
@@ -78,18 +84,22 @@ class EliteCard(Card, Combatable, Magical):
         :param incoming_damage: Damage received
         :return: Dictionary describing defense resolution
         """
-        blocked = incoming_damage // 2
-        taken = incoming_damage - blocked
+        taken = incoming_damage // 2
+        blocked = incoming_damage - taken
         self.info[EliteInfo.HEALTH.value] -= taken
 
+        if self.info[EliteInfo.HEALTH.value] < 0:
+            self.info[EliteInfo.HEALTH.value] = 0
+
         return {
+            Combat.DEFENDER.value: self.info[CardInfo.NAME.value],
             Combat.DAMAGE_TAKEN.value: taken,
             Combat.DAMAGE_BLOCKED.value: blocked,
             Combat.STILL_ALIVE.value:
                 self.info[EliteInfo.HEALTH.value] > 0
         }
 
-    def cast_spell(self, spell_name: str, targets: List[str]) -> Dict:
+    def cast_spell(self, spell_name: str, targets: List[Dict]) -> Dict:
         """
         Cast a spell using the card's mana pool.
 
@@ -99,11 +109,15 @@ class EliteCard(Card, Combatable, Magical):
         """
         mana_used = len(targets) * 2
         self.info[EliteInfo.MANA.value] -= mana_used
+        targets_name = []
+        for target in targets:
+            targets_name.append(target[CardInfo.NAME.value])
+            target[CreatureInfo.HEALTH.value] -= 2
 
         return {
             Magic.CASTER.value: self.info[CardInfo.NAME.value],
             Magic.SPELL.value: spell_name,
-            Magic.TARGETS.value: targets,
+            Magic.TARGETS.value: targets_name,
             Magic.MANA_USED.value: mana_used
         }
 

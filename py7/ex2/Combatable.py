@@ -10,6 +10,7 @@ class Combat(Enum):
     Enumeration of keys used in combat-related action results.
     """
     ATTACKER = "attacker"
+    DEFENDER = "defender"
     TARGET = "target"
     DAMAGE = "damage"
     DAMAGE_TAKEN = "damage_taken"
@@ -24,7 +25,7 @@ class Combatable(ABC):
     """
 
     @abstractmethod
-    def attack(self, target: str) -> Dict:
+    def attack(self, target: Dict) -> Dict:
         """
         Perform an attack on a target.
 

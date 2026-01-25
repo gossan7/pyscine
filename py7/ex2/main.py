@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from .EliteCard import EliteCard
+from . import EliteCard, CreatureCard, CreatureInfo
 
 
-def main():
+def main() -> None:
     """
     Demonstration script for Exercise 2: Ability System.
     """
@@ -13,10 +13,19 @@ def main():
         "Arcane Warrior",
         4,
         "Epic",
-        5,
-        10,
-        5
+        attack=5,
+        health=10,
+        mana=8
     )
+
+    enemy = CreatureCard(
+        "Enemy",
+        5,
+        "Common",
+        attack=5,
+        health=5
+    )
+    enemy_info = enemy.get_card_info()
 
     print("EliteCard capabilities:")
     print("- Card: ['play', 'get_card_info', 'is_playable']")
@@ -27,13 +36,35 @@ def main():
 
     print("Combat phase:")
     print("Attack result:",
-          elite.attack("Enemy"))
+          elite.attack(enemy_info))
+    attack = enemy_info[CreatureInfo.ATTACK.value]
     print("Defense result:",
-          elite.defend(5))
+          elite.defend(attack))
 
     print("\nMagic phase:")
+
+    enemy1 = CreatureCard(
+        "Enemy1",
+        5,
+        "Common",
+        attack=5,
+        health=5
+    )
+
+    enemy2 = CreatureCard(
+        "Enemy2",
+        5,
+        "Common",
+        attack=5,
+        health=5
+    )
+
     print("Spell cast:",
-          elite.cast_spell("Fireball", ["Enemy1", "Enemy2"]))
+          elite.cast_spell(
+              "Fireball",
+              [enemy1.get_card_info(), enemy2.get_card_info()])
+          )
+
     print("Mana channel:",
           elite.channel_mana(3))
 
