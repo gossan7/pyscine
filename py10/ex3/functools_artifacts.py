@@ -44,20 +44,17 @@ def spell_dispatcher() -> Callable:
     def cast(spell: Any):
         return "Unknown spell type"
 
-    # Handle int → damage spell
     @cast.register
     def _(power: int):
         return f"Deals {power} damage!"
 
-    # Handle str → enchantment spell
     @cast.register
     def _(enchantment: str):
         return f"Enchants item with '{enchantment}'"
 
-    # Handle list → multi-cast spell
     @cast.register
     def _(spells: list):
-        results = [cast(s) for s in spells]  # recursive call for each element
+        results = [cast(s) for s in spells]
         return results
 
     return cast
