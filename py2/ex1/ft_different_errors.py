@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def garden_operations(flag="All"):
+def garden_operations(flag: str = "All") -> None:
     """
     Trigger specific Python exceptions based on the provided flag.
 
@@ -34,7 +34,7 @@ def garden_operations(flag="All"):
             dictionnary["inexistent_key"]
 
 
-def test_error_types():
+def test_error_types() -> None:
     """
     Test and demonstrate handling of multiple Python exception types.
 
@@ -44,25 +44,40 @@ def test_error_types():
     """
     print("=== Garden Error Types Demo ===")
 
-    tests = ["ValueError", "ZeroDivisionError",
-             "FileNotFoundError", "KeyError"]
+    tests = [
+        "ValueError",
+        "ZeroDivisionError",
+        "FileNotFoundError",
+        "KeyError"
+    ]
 
     for test in tests:
         print(f"\nTesting {test}...")
         try:
             garden_operations(test)
-        except (ValueError, ZeroDivisionError,
-                FileNotFoundError, KeyError) as e:
+        except (
+            ValueError,
+            ZeroDivisionError,
+            FileNotFoundError,
+            KeyError
+        ) as e:
             print(f"Caught {test}: {e}")
 
     print("\nTesting multiple errors together")
     try:
         garden_operations()
-    except (ValueError, ZeroDivisionError,
-            FileNotFoundError, KeyError):
+    except (
+        ValueError,
+        ZeroDivisionError,
+        FileNotFoundError,
+        KeyError
+    ):
         print("Caught an error, but program continues!")
     print("\nAll error types tested successfully!")
 
 
 if __name__ == "__main__":
-    test_error_types()
+    try:
+        test_error_types()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

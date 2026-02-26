@@ -6,7 +6,7 @@ class GardenError(Exception):
 
     All custom garden exceptions should inherit from this class.
     """
-    pass
+
 
 class PlantError(GardenError):
     """
@@ -15,7 +15,8 @@ class PlantError(GardenError):
     Args:
         plant (str): The name of the affected plant.
     """
-    def __init__(self, plant: str):
+
+    def __init__(self, plant: str) -> None:
         super().__init__(f"The {plant} plant is wilting!")
 
 
@@ -23,25 +24,26 @@ class WaterError(GardenError):
     """
     Exception raised when there is a water supply issue.
     """
-    def __init__(self):
+
+    def __init__(self) -> None:
         super().__init__("Not enough water in the tank!")
 
 
-def plant_error():
+def plant_error() -> None:
     """
     Raise a PlantError for demonstration purposes.
     """
     raise PlantError("tomato")
 
 
-def water_error():
+def water_error() -> None:
     """
     Raise a WaterError for demonstration purposes.
     """
     raise WaterError()
 
 
-def test_custom_errors():
+def test_custom_errors() -> None:
     """
     Demonstrate custom garden exception handling.
 
@@ -77,4 +79,7 @@ def test_custom_errors():
 
 
 if __name__ == "__main__":
-    test_custom_errors()
+    try:
+        test_custom_errors()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

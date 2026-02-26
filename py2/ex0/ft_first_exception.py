@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
-def check_temperature(temp_str: str):
+def check_temperature(temp_str: str) -> int | None:
     """
     Check whether a temperature value is valid for plants.
 
     The function attempts to convert the input string to an integer.
     It prints an error message if the value is not a number or if the
-    temperature is outside the acceptable range (0–40°C).
+    temperature is outside the acceptable range (0-40°C).
 
     Args:
         temp_str (str): The temperature value as a string.
@@ -18,19 +18,17 @@ def check_temperature(temp_str: str):
         n = int(temp_str)
         if n > 40:
             print(f"Error: {n}°C is too hot for plants (max 40°C)")
-            return None
         elif n < 0:
             print(f"Error: {n}°C is too cold for plants (min 0°C)")
-            return None
         else:
             print(f"Temperature {n}°C is perfect for plants!")
-        return n
+            return n
     except ValueError:
         print(f"Error: '{temp_str}' is not a valid number")
-        return None
+    return None
 
 
-def test_temperature_input():
+def test_temperature_input() -> None:
     """
     Test the check_temperature function with predefined values.
 
@@ -47,4 +45,7 @@ def test_temperature_input():
 
 
 if __name__ == "__main__":
-    test_temperature_input()
+    try:
+        test_temperature_input()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
