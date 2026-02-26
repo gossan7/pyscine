@@ -15,19 +15,9 @@ class Plant():
         self.height = height
         self.days = age
 
-    def print_infos(self) -> None:
-        """Print the plant's information including its characteristic."""
-        print(self.name, f"({self.__class__.__name__}):",
-              f"{self.height}cm,", f"{self.days} days,",
-              self.get_characteristic())
-
-    def get_characteristic(self) -> str:
-        """Get the plant's specific characteristic.
-
-        Returns:
-            A string describing the plant's characteristic.
-        """
-        return None
+    def __str__(self) -> str:
+        return f"{self.name} ({self.__class__.__name__}): " + \
+            f"{self.height}cm, {self.days} days"
 
 
 class Flower(Plant):
@@ -45,9 +35,12 @@ class Flower(Plant):
         super().__init__(name, height, age)
         self.color = color
 
-    def bloom(self):
+    def bloom(self) -> None:
         """Display a blooming message for the flower."""
         print(self.name, "is blooming beautifully!")
+
+    def __str__(self) -> str:
+        return super().__str__() + self.get_characteristic()
 
     def get_characteristic(self) -> str:
         """Get the flower's characteristic.
@@ -55,7 +48,7 @@ class Flower(Plant):
         Returns:
             A string describing the flower's color.
         """
-        return f"{self.color} color"
+        return f", {self.color} color"
 
 
 class Tree(Plant):
@@ -74,10 +67,13 @@ class Tree(Plant):
         super().__init__(name, height, age)
         self.trunk_diameter = trunk_diameter
 
-    def shade(self):
+    def shade(self) -> None:
         """Calculate and display the shade area provided by the tree."""
         shade = ((self.height * self.trunk_diameter) / 1000) * 3
         print(f"{self.name} provides {shade:.0f} square meters of shade")
+
+    def __str__(self) -> str:
+        return super().__str__() + self.get_characteristic()
 
     def get_characteristic(self) -> str:
         """Get the tree's characteristic.
@@ -85,7 +81,7 @@ class Tree(Plant):
         Returns:
             A string describing the tree's trunk diameter.
         """
-        return f"{self.trunk_diameter}cm diameter"
+        return f", {self.trunk_diameter}cm diameter"
 
 
 class Vegetable(Plant):
@@ -106,9 +102,12 @@ class Vegetable(Plant):
         self.harvest_season = harvest_season
         self.nutritional_value = nutritional_value
 
-    def print_nutrition(self):
+    def print_nutrition(self) -> None:
         """Display the vegetable's nutritional value."""
         print(f"{self.name} is rich in {self.nutritional_value}")
+
+    def __str__(self) -> str:
+        return super().__str__() + self.get_characteristic()
 
     def get_characteristic(self) -> str:
         """Get the vegetable's characteristic.
@@ -116,31 +115,44 @@ class Vegetable(Plant):
         Returns:
             A string describing the vegetable's harvest season.
         """
-        return f"{self.harvest_season} harvest"
+        return f", {self.harvest_season} harvest"
 
 
 def main() -> None:
     """Main function demonstrating garden plant types."""
-    flowers = [Flower("Rose", 25, 30, "red"),
-               Flower("Sunflower", 80, 45, "yellow")]
-    trees = [Tree("Oak", 500, 1825, 50),
-             Tree("Pine", 620, 2100, 45)]
-    vegetables = [Vegetable("Tomato", 80, 90, "summer", "vitamin c"),
-                  Vegetable("Carrot", 30, 75, "autumn", "vitamin a")]
+
+    flowers = [
+        Flower("Rose", 25, 30, "red"),
+        Flower("Sunflower", 80, 45, "yellow")
+    ]
+
+    trees = [
+        Tree("Oak", 500, 1825, 50),
+        Tree("Pine", 620, 2100, 45)
+    ]
+
+    vegetables = [
+        Vegetable("Tomato", 80, 90, "summer", "vitamin C"),
+        Vegetable("Carrot", 30, 75, "autumn", "vitamin A")
+    ]
+
     print("=== Garden Plant Types ===")
+
     print("\n=== Flowers ===")
     for flower in flowers:
-        flower.print_infos()
+        print(flower)
         flower.bloom()
         print()
+
     print("\n=== Trees ===")
     for tree in trees:
-        tree.print_infos()
+        print(tree)
         tree.shade()
         print()
+
     print("\n=== Vegetables ===")
     for vegetable in vegetables:
-        vegetable.print_infos()
+        print(vegetable)
         vegetable.print_nutrition()
         print()
 

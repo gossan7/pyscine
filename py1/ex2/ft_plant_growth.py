@@ -2,26 +2,47 @@
 
 class Plant:
     """Represents a plant with basic garden information."""
+
     def __init__(self, name: str, height: int, age: int) -> None:
+        """Initialize a Plant.
+
+        Args:
+            name: The name of the plant.
+            height: The initial height in centimeters.
+            age: The age of the plant in days.
+        """
         self.name = name
         self.height = height
         self.days = age
 
     def age(self, n: int) -> None:
-        """Increase plant age by n days and grow height by n cm."""
+        """Age the plant by a number of days and grow accordingly.
+
+        Args:
+            n: The number of days to age the plant.
+        """
         self.days += n
         self.grow(n)
 
     def grow(self, n: int) -> None:
-        """Increase plant height by n cm."""
+        """Grow the plant by a specified amount.
+
+        Args:
+            n: The amount to grow in centimeters.
+        """
         self.height += n
 
-    def get_info(self) -> tuple:
-        """Return the plant's current name, height, and age."""
+    def get_info(self) -> tuple[str, int, int]:
+        """Get the plant's information.
+
+        Returns:
+            A tuple containing (name, height, days).
+        """
         return ((self.name, self.height, self.days))
 
 
-def main():
+def main() -> None:
+    """Main function demonstrating the Plant Growth."""
     rose = Plant("Rose", 25, 30)
     day_1 = rose.get_info()
     print("=== Day 1 ===")

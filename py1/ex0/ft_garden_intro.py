@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-def main():
+def main() -> None:
+    """Main function demonstrating the Garden."""
     name = "Rose"
     height = "25cm"
     age = "30 days"

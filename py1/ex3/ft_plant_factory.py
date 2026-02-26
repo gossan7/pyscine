@@ -3,10 +3,6 @@
 class Factory:
     """Factory class for creating and managing plant instances."""
 
-    def __init__(self):
-        """Initialize a Factory with an empty plant list."""
-        self.plants = []
-
     def create_plants(self, args: tuple) -> list:
         """Create multiple plants from a tuple of plant data.
 
@@ -16,10 +12,7 @@ class Factory:
         Returns:
             A list of created Plant instances.
         """
-        self.plants = []
-        for arg in args:
-            self.plants.append(Plant(*arg))
-        return self.plants
+        return [Plant(*arg) for arg in args]
 
 
 class Plant:

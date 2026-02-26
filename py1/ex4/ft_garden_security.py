@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-class SecurePlant():
+class SecurePlant:
     """Represents a plant with secure, validated attributes."""
 
     def __init__(self, name: str, height: int, age: int) -> None:
@@ -22,7 +22,7 @@ class SecurePlant():
         self.__days = age
         print(f"Plant created: {name}")
 
-    def set_height(self, new_height) -> None:
+    def set_height(self, new_height: int) -> None:
         """Set the plant's height with validation.
 
         Args:
@@ -36,7 +36,7 @@ class SecurePlant():
         self.__height = new_height
         print(f"Height updated: {new_height}cm [OK]")
 
-    def set_age(self, new_age) -> None:
+    def set_age(self, new_age: int) -> None:
         """Set the plant's age with validation.
 
         Args:
@@ -75,7 +75,7 @@ class SecurePlant():
         return self.__name
 
 
-def main():
+def main() -> None:
     """Main function demonstrating the Garden Security System."""
     print("=== Garden Security System ===")
     rose = SecurePlant("Rose", 0, 0)
