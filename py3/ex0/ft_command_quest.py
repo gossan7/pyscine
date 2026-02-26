@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+
 import sys
 
 
-def main():
+def main() -> None:
     """
     Display information about command-line arguments.
 
@@ -11,6 +12,7 @@ def main():
     provided to the script.
     """
     print("=== Command Quest ===")
+
     size = len(sys.argv)
 
     if size == 1:
@@ -30,4 +32,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
