@@ -99,7 +99,7 @@ class Garden:
             owner: The name of the garden's owner.
         """
         self.owner = owner
-        self.plants = []
+        self.plants: list[Plant] = []
         self.total_growth = 0
 
     def add_plant(self, plant: Plant) -> None:
@@ -195,7 +195,7 @@ class GardenManager:
 
     def __init__(self) -> None:
         """Initialize a GardenManager with an empty garden collection."""
-        self.gardens = dict()
+        self.gardens: dict[str, Garden] = dict()
 
     def add_garden(self, garden: Garden) -> None:
         """Add a garden to the manager's collection.
@@ -238,20 +238,34 @@ def main() -> None:
     """Main function demonstrating the Garden Analytics Platform."""
     print("=== Garden Management System Demo ===\n")
 
-    manager = GardenManager.create_garden_network(("Alice",
-                                                   "Bob"))
+    manager = GardenManager.create_garden_network((
+        "Alice",
+        "Bob"
+    ))
 
-    manager.gardens["Alice"].add_plant(Plant("Oak Tree",
-                                             100))
+    manager.gardens["Alice"].add_plant(
+        Plant(
+            "Oak Tree",
+            100
+        )
+    )
 
-    manager.gardens["Alice"].add_plant(FloweringPlant("Rose",
-                                                      25,
-                                                      "red"))
+    manager.gardens["Alice"].add_plant(
+        FloweringPlant(
+            "Rose",
+            25,
+            "red"
+        )
+    )
 
-    manager.gardens["Alice"].add_plant(PrizeFlower("Sunflower",
-                                                   50,
-                                                   "yellow",
-                                                   10))
+    manager.gardens["Alice"].add_plant(
+        PrizeFlower(
+            "Sunflower",
+            50,
+            "yellow",
+            10
+        )
+    )
 
     print()
     manager.gardens["Alice"].grow_all()
