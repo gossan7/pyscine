@@ -2,7 +2,7 @@
 import sys
 
 
-def main():
+def main() -> None:
     """
     Analyze player scores provided as command-line arguments.
 

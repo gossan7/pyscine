@@ -2,7 +2,7 @@
 import sys
 
 
-def display_analysis(inventory: dict, items: int):
+def display_analysis(inventory: dict, items: int) -> None:
     """
     Display a high-level analysis of the inventory.
 
@@ -14,12 +14,15 @@ def display_analysis(inventory: dict, items: int):
         items (int): Total number of items across all inventory entries.
     """
     print("=== Inventory System Analysis ===")
+
     print(f"Total items in inventory: {items}")
+
     print(f"Unique item types: {len(inventory)}")
+
     print()
 
 
-def display_inventory(inventory: dict, items: int):
+def display_inventory(inventory: dict, items: int) -> None:
     """
     Display the current inventory with quantities and percentages.
 
@@ -32,15 +35,18 @@ def display_inventory(inventory: dict, items: int):
         items (int): Total number of items across all inventory entries.
     """
     print("=== Current Inventory ===")
+
     inventory_list = [(item, inventory[item]) for item in inventory]
+
     inventory_list.sort(reverse=True, key=lambda x: x[1])
+
     for item, units in inventory_list:
         print(f"{item}: {units} units ({(units / items) * 100:.1f}%)")
 
     print()
 
 
-def display_statistics(inventory: dict):
+def display_statistics(inventory: dict) -> None:
     """
     Display inventory statistics.
 
@@ -64,7 +70,7 @@ def display_statistics(inventory: dict):
     print()
 
 
-def display_categories(inventory: dict, items: int):
+def display_categories(inventory: dict, items: int) -> None:
     """
     Categorize inventory items by abundance.
 
@@ -97,7 +103,7 @@ def display_categories(inventory: dict, items: int):
     print()
 
 
-def display_suggestions(inventory: dict):
+def display_suggestions(inventory: dict) -> None:
     """
     Display inventory management suggestions.
 
@@ -107,14 +113,15 @@ def display_suggestions(inventory: dict):
     Args:
         inventory (dict): Dictionary mapping item names to quantities.
     """
-    n_restock = round(len(inventory) / 3)
-    inventory_list = [item for item in inventory]
+    inventory_list = [item for item in inventory if inventory[item] < 2]
+    if not inventory_list:
+        return
     inventory_list.sort(key=lambda x: inventory[x])
-    print(f"Restock needed: {inventory_list[:n_restock]}")
+    print(f"Restock needed: {', '.join(inventory_list)}")
     print()
 
 
-def display_properties(inventory: dict):
+def display_properties(inventory: dict) -> None:
     """
     Demonstrate dictionary properties and operations.
 
@@ -126,12 +133,16 @@ def display_properties(inventory: dict):
         inventory (dict): Dictionary mapping item names to quantities.
     """
     print("=== Dictionary Properties Demo ===")
-    print(f"Dictionary keys: {list(inventory.keys())}")
-    print(f"Dictionary values: {list(inventory.values())}")
+    print(f"Dictionary keys: {', '.join(list(inventory.keys()))}")
+
+    print(
+        f"Dictionary values: {', '.join(list(map(str, inventory.values())))}"
+    )
+
     print(f"Sample lookup - 'sword' in inventory: {'sword' in inventory}")
 
 
-def main():
+def main() -> None:
     """
     Parse command-line arguments and manage the inventory system.
 
@@ -145,12 +156,17 @@ def main():
     for arg in sys.argv[1:]:
         try:
             item, units = arg.split(":")
-            units = int(units)
-            inventory[item] = units
-            items += units
+            n = int(units)
+            if n <= 0:
+                continue
+            inventory[item] = n
+            items += n
         except Exception as e:
             print(f"Error occured during parsing: {e}")
             return
+
+    if not inventory:
+        return
 
     display_analysis(inventory, items)
     display_inventory(inventory, items)
@@ -161,4 +177,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

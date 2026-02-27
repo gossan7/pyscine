@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+
 import math
 
 
-def print_pos(x: int, y: int, z: int):
+def print_pos(x: int, y: int, z: int) -> None:
     """
     Display a player's position in 3D space.
 
@@ -15,7 +16,7 @@ def print_pos(x: int, y: int, z: int):
     print(f"Coordinates: X={x}, Y={y}, Z={z}")
 
 
-def parse_coordinates(coordinates_string: str):
+def parse_coordinates(coordinates_string: str) -> tuple[int, ...]:
     """
     Parse a player's coordinate string.
 
@@ -26,7 +27,8 @@ def parse_coordinates(coordinates_string: str):
     return coordinates
 
 
-def calc_distance(base: tuple[int, int, int], pos: tuple[int, int, int]):
+def calc_distance(base: tuple[int, ...],
+                  pos: tuple[int, ...]) -> float:
     """
     Calculate distance between two 3D points (coordinates)
 
@@ -42,7 +44,7 @@ def calc_distance(base: tuple[int, int, int], pos: tuple[int, int, int]):
     return distance
 
 
-def main():
+def main() -> None:
     """
     Parse command-line arguments and compute 3D coordinates.
 
@@ -56,9 +58,14 @@ def main():
     base_coordinates = (0, 0, 0)
 
     valid_coordinates = (10, 20, 5)
+
     print(f"Position created: {valid_coordinates}")
-    print(f"Distance between {base_coordinates} and {valid_coordinates}:",
-          f"{calc_distance(base_coordinates, valid_coordinates):.2f}")
+
+    print(
+        f"Distance between {base_coordinates} and {valid_coordinates}:",
+        f"{calc_distance(base_coordinates, valid_coordinates):.2f}"
+    )
+
     print()
 
     valid_coordinates_str = "3,4,0"
@@ -68,17 +75,23 @@ def main():
         print(f"Parsing coordinates: \"{valid_coordinates_str}\"")
 
         pos1 = parse_coordinates(valid_coordinates_str)
+
         print(f"Parsed position: {pos1}")
-        print(f"Distance between {base_coordinates} and {pos1}:",
-              f"{calc_distance(base_coordinates, pos1):.1f}")
+        print(
+            f"Distance between {base_coordinates} and {pos1}:",
+            f"{calc_distance(base_coordinates, pos1):.1f}"
+        )
         print()
 
         print(f"Parsing invalid coordinates: \"{invalid_coordinates_str}\"")
 
         pos2 = parse_coordinates(invalid_coordinates_str)
+
         print(f"Parsed position: {pos2}")
-        print(f"Distance between {base_coordinates} and {pos2}:",
-              f"{calc_distance(base_coordinates, pos2):.1f}")
+        print(
+            f"Distance between {base_coordinates} and {pos2}:",
+            f"{calc_distance(base_coordinates, pos2):.1f}"
+        )
         print()
 
     except Exception as e:
@@ -95,4 +108,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
