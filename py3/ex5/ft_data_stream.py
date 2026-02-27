@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
+
 import random
 import time
+from typing import Generator
 
 
-def game_event_stream(num_events):
+def game_event_stream(num_events: int) -> Generator[tuple, None, None]:
     """
     Generate a stream of simulated game events.
 
@@ -40,7 +42,7 @@ def game_event_stream(num_events):
 def display_analitics(high_level_count: int,
                       event_type_count: dict,
                       n_events: int,
-                      duration: float):
+                      duration: float) -> None:
     """
     Display analytics computed from the streamed game events.
 
@@ -58,17 +60,19 @@ def display_analitics(high_level_count: int,
             in seconds.
     """
     print("=== Stream Analytics ===")
+
     print(f"Total events processed: {n_events}")
     print(f"High-level players (10+): {high_level_count}")
     print(f"Treasure events: {event_type_count['found treasure']}")
     print(f"Level-up events: {event_type_count['leveled up']}")
     print()
+
     print("Memory usage: Constant (streaming)")
     print(f"Processing time: {duration:.3f} seconds")
     print()
 
 
-def fibonacci_stream(n_elem):
+def fibonacci_stream(n_elem) -> Generator[int, None, None]:
     """
     Generate a Fibonacci number sequence.
 
@@ -87,7 +91,7 @@ def fibonacci_stream(n_elem):
         a, b = b, a + b
 
 
-def prime_stream(n_elem):
+def prime_stream(n_elem) -> Generator[int, None, None]:
     """
     Generate a sequence of prime numbers.
 
@@ -100,7 +104,7 @@ def prime_stream(n_elem):
     Yields:
         int: Next prime number.
     """
-    def check_prime(n):
+    def check_prime(n) -> bool:
         """
         Check whether a number is prime.
 
@@ -126,7 +130,7 @@ def prime_stream(n_elem):
         n += 1
 
 
-def main():
+def main() -> None:
     """
     Entry point of the Stream Wizard program.
 
@@ -139,12 +143,16 @@ def main():
     print()
 
     high_level_count = 0
-    event_type_count = {'killed monster': 0,
-                        'found treasure': 0,
-                        'leveled up': 0}
+    event_type_count = {
+        'killed monster': 0,
+        'found treasure': 0,
+        'leveled up': 0
+    }
+
     start_time = time.time()
     n_events = 1000
     events_generator = game_event_stream(n_events)
+
     i = 0
     for event_str, event_data in events_generator:
         if i < 3:
@@ -155,37 +163,51 @@ def main():
             high_level_count += 1
         event_type_count[event_data['event']] += 1
         i += 1
+
     print()
 
     end_time = time.time()
 
-    display_analitics(high_level_count, event_type_count,
-                      n_events, end_time - start_time)
+    display_analitics(
+        high_level_count,
+        event_type_count,
+        n_events,
+        end_time - start_time
+    )
 
     print("=== Generator Demonstration ===")
 
     n_fib = 10
     fibonacci_generator = fibonacci_stream(n_fib)
+
     print(f"Fibonacci sequence (first {n_fib}): ", end="")
+
     i = 0
     for n in fibonacci_generator:
         print(n, end="")
         i += 1
         if i != n_fib:
             print(", ", end="")
+
     print()
 
     n_prime = 5
     prime_generator = prime_stream(n_prime)
+
     print(f"Prime numbers (first {n_prime}): ", end="")
+
     i = 0
     for n in prime_generator:
         print(n, end="")
         i += 1
         if i != n_prime:
             print(", ", end="")
+
     print()
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
