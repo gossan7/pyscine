@@ -53,16 +53,23 @@ class NumericProcessor(DataProcessor):
         """
         if not self.validate(data):
             raise ValueError(f"Invalid numeric data: \'{data}\'")
-        return (f"Processed {len(data)} numeric values, sum = {sum(data)}, "
-                f"avg = {sum(data) / len(data):.1f}")
+        return (
+            f"Processed {len(data)} numeric values, sum = {sum(data)}, "
+            f"avg = {sum(data) / len(data):.1f}"
+        )
 
     def validate(self, data: List[int]) -> bool:
         """
         Validate that the data is a list of integers.
         """
-        for n in data:
-            if not isinstance(n, int):
-                return False
+        try:
+            for n in data:
+                if not isinstance(n, int):
+                    return False
+
+        except Exception:
+            return False
+
         return True
 
 
@@ -77,8 +84,10 @@ class TextProcessor(DataProcessor):
         """
         if not self.validate(data):
             raise ValueError(f"Invalid text data: \"{data}\"")
-        return (f"Processed text: {len(data)} characters, "
-                f"{len(data.split(' '))} words")
+        return (
+            f"Processed text: {len(data)} characters, "
+            f"{len(data.split(' '))} words"
+        )
 
     def validate(self, data: str) -> bool:
         """
@@ -100,8 +109,10 @@ class LogProcessor(DataProcessor):
         if not self.validate(data):
             raise ValueError(f"Invalid log data: \"{data}\"")
         log_data = data.split(":", 1)
-        return (f"[{'ALERT' if log_data[0] == 'ERROR' else 'INFO'}] "
-                f"{log_data[0]} level detected:{log_data[1]}")
+        return (
+            f"[{'ALERT' if log_data[0] == 'ERROR' else 'INFO'}] "
+            f"{log_data[0]} level detected:{log_data[1]}"
+        )
 
     def validate(self, data: str) -> bool:
         """
@@ -109,9 +120,11 @@ class LogProcessor(DataProcessor):
         """
         if not isinstance(data, str):
             return False
+
         log_type = data.split(":", 1)[0]
         if log_type == "ERROR" or log_type == "INFO":
             return True
+
         return False
 
 
@@ -127,7 +140,15 @@ def check_data(data: Any, processor: DataProcessor) -> str:
     return processor.format_output(result)
 
 
-def main():
+def main() -> None:
+    """
+    Demonstration of polymorphism in python.
+
+    Returns
+    -------
+    int
+        An error code.
+    """
     print("=== CODE NEXUS - DATA PROCESSOR FOUNDATION ===\n")
 
     print("Initializing Numeric Processor...")
@@ -139,6 +160,7 @@ def main():
         print("Validation: Numeric data verified")
         print(s)
         print()
+
     except ValueError as e:
         print(e)
 
@@ -151,6 +173,7 @@ def main():
         print("Validation: Text data verified")
         print(s)
         print()
+
     except ValueError as e:
         print(e)
 
@@ -163,18 +186,23 @@ def main():
         print("Validation: Log entry verified")
         print(s)
         print()
+
     except ValueError as e:
         print(e)
 
     print("=== Polymorphic Processing Demo ===\n")
-    data_and_processors = [([1, 2, 3], numeric_processor),
-                           ("Hello World", text_processor),
-                           ("INFO: System ready", log_processor)]
+    data_and_processors = [
+        ([1, 2, 3], numeric_processor),
+        ("Hello World", text_processor),
+        ("INFO: System ready", log_processor)
+    ]
+
     print("Processing multiple data types through same interface...")
     result = 1
     for data, processor in data_and_processors:
         try:
             print(f"Result {result}: {check_data(data, processor)}")
+
         except ValueError as e:
             print(e)
 
@@ -182,4 +210,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

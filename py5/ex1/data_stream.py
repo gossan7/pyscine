@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Any, List, Dict, Optional, Union
+from typing import Any, List, Dict, Optional, Union, Tuple
 from abc import ABC, abstractmethod
 
 
@@ -9,13 +9,13 @@ class DataStream(ABC):
 
     def __init__(self, stream_id: str) -> None:
         self.stream_id: str = stream_id
-        self.stats: Dict[str, Union[str, int, float]] = {}
+        self.stats: Dict[str, Union[int, float]] = {}
         self.data: Optional[List[Any]] = None
 
     @abstractmethod
     def process_batch(self, data_batch: List[Any]) -> str:
         """Process a batch of data and return a summary string."""
-        raise NotImplementedError
+        pass
 
     def filter_data(
         self,
@@ -25,7 +25,7 @@ class DataStream(ABC):
         """Filter data based on optional criteria."""
         return data_batch
 
-    def get_stats(self) -> Dict[str, Union[str, int, float]]:
+    def get_stats(self) -> Dict[str, Union[int, float]]:
         """Return stream statistics."""
         return self.stats
 
@@ -163,6 +163,7 @@ def main() -> None:
         ("humidity", 65),
         ("pressure", 1013),
     ]
+
     print(f"Stream ID: {sensor.stream_id}, Type: Environmental Data")
     print(f"Processing sensor batch: [{format_pairs(sensor_data)}]")
     print(
@@ -178,16 +179,19 @@ def main() -> None:
         ("sell", 150),
         ("buy", 75),
     ]
+
     print(f"Stream ID: {transaction.stream_id}, Type: Financial Data")
     print(
         f"Processing transaction batch: "
         f"[{format_pairs(transaction_data)}]"
     )
+
     print(
         f"Transaction analysis: "
         f"{processor.process(transaction, transaction_data)}, "
         f"net flow: {transaction.get_stats()['flow']:+}"
     )
+
     print()
 
     print("Initializing Event Stream...")
@@ -195,44 +199,78 @@ def main() -> None:
     event_data = ["login", "error", "logout"]
     print(f"Stream ID: {event.stream_id}, Type: System Events")
     print(f"Processing event batch: [{', '.join(event_data)}]")
+
     print(
         f"Event analysis: {processor.process(event, event_data)}, "
         f"{event.get_stats()['error']} error detected"
     )
+
     print()
 
     print("=== Polymorphic Stream Processing ===")
     print("Processing mixed stream types through unified interface...\n")
 
-    batches = [
-        ("Sensor data:", [("temp", 40), ("temp", 50)], sensor),
+    batches: List[Tuple[str, List[Tuple[str, int] | str],
+                        SensorStream | TransactionStream | EventStream]] = [
+        (
+            "Sensor data:",
+            [
+                ("temp", 40),
+                ("temp", 50)
+            ],
+            sensor
+        ),
         (
             "Transaction data:",
-            [("buy", 100), ("sell", 50), ("buy", 200), ("sell", 100)],
+            [
+                ("buy", 100),
+                ("sell", 50),
+                ("buy", 200),
+                ("sell", 100)
+            ],
             transaction,
         ),
-        ("Event data:", ["login", "logout", "login"], event),
+        (
+            "Event data:",
+            [
+                "login",
+                "logout",
+                "login"
+            ],
+            event
+        ),
     ]
 
     for label, data, stream in batches:
-        print(label, processor.process(stream, data))
+        print(
+            label,
+            processor.process(stream, data)
+        )
+
     print()
 
     print("Stream filtering active: High-priority data only")
+
     sensor_alerts = len(
         sensor.filter_data(batches[0][1], criteria="high temp")
     )
+
     transaction_alerts = len(
         transaction.filter_data(batches[1][1], criteria="high trans")
     )
+
     print(
         f"Filtered results: {sensor_alerts} critical sensor alerts, "
         f"{transaction_alerts} large transaction"
     )
+
     print()
 
     print("All streams processed successfully. Nexus throughput optimal.")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
