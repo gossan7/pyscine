@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Any, Dict, Protocol, Union, Deque, List
+from typing import Any, Dict, Protocol, Union, Deque
 from abc import ABC, abstractmethod
 from datetime import datetime
 from collections import deque
@@ -12,7 +12,7 @@ class ProcessingStage(Protocol):
 
 
 class InputStage:
-    def process(self, data: Union[str, Dict, List[str]]) -> Dict:
+    def process(self, data: Any) -> Any:
         data_dict: Dict[str, str | int | bool]
 
         if isinstance(data, dict):
@@ -38,7 +38,7 @@ class InputStage:
 
 
 class TransformStage:
-    def process(self, data: Dict) -> Dict:
+    def process(self, data: Any) -> Any:
         if not isinstance(data, dict):
             raise TypeError("Invalid data format")
 
@@ -52,7 +52,7 @@ class TransformStage:
 
 
 class OutputStage:
-    def process(self, data: Dict) -> str:
+    def process(self, data: Any) -> Any:
         if not isinstance(data, dict):
             raise TypeError("Invalid data format")
         del data["type"]
