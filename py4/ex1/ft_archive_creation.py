@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-def main():
+def main() -> None:
     """
     Create a new archive file 'new_discovery.txt' and inscribe
     three preservation entries. Display a log of the creation
@@ -20,9 +20,11 @@ def main():
     print(f"Initializing new storage unit: {file_name}")
     try:
         file = open(file_name, "w")
+
     except OSError as e:
         print(f"ERROR: Could not create archive '{file_name}': {e}")
         return
+
     print("Storage unit created successfully...\n")
 
     print("Inscribing preservation data...")
@@ -36,4 +38,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

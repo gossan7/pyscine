@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def crisis_handler(file_name: str):
+def crisis_handler(file_name: str) -> None:
     """
     Handle file access in a crisis-safe manner.
 
@@ -31,7 +31,7 @@ def crisis_handler(file_name: str):
         print("STATUS: Crisis handled, system stable\n")
 
 
-def main():
+def main() -> None:
     """
     Simulate crisis response operations in the Cyber Archives.
 
@@ -53,4 +53,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

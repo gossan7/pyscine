@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-def main():
+def main() -> None:
     """
     Demonstrate secure vault operations in the Cyber Archives.
 
@@ -19,18 +19,26 @@ def main():
             print("Vault connection established with failsafe protocols\n")
             print("SECURE EXTRACTION:")
             for line in vault:
-                print(f"[CLASSIFIED] {line.strip()}")
+                print(f"[CLASSIFIED] {line}", end="")
+
     except FileNotFoundError as e:
         print(f"Error: {e}")
 
-    print("\nSECURE PRESERVATION:")
-    with open("security_protocols.txt", "w") as vault:
-        vault.write("New security protocols archived\n")
-        print("[CLASSIFIED] New security protocols archived")
+    print("\n\nSECURE PRESERVATION:")
+    try:
+        with open("security_protocols.txt", "w") as vault:
+            vault.write("New security protocols archived\n")
+            print("[CLASSIFIED] New security protocols archived")
+
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
 
     print("Vault automatically sealed upon completion")
     print("\nAll vault operations completed with maximum security.")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

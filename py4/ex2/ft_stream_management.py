@@ -2,7 +2,7 @@
 import sys
 
 
-def main():
+def main() -> None:
     """
     Demonstrate three-channel communication in the Cyber Archives.
 
@@ -15,8 +15,11 @@ def main():
     """
     print("=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===\n")
 
-    archivist_id = input("Input Stream active. Enter archivist ID: ")
-    status_report = input("Input Stream active. Enter status report: ")
+    print("Input Stream active. Enter archivist ID: ", end="")
+    archivist_id = input()
+
+    print("Input Stream active. Enter status report: ", end="")
+    status_report = input()
 
     print(f"\n[STANDARD] Archive status from {archivist_id}: {status_report}",
           file=sys.stdout)
@@ -30,4 +33,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
