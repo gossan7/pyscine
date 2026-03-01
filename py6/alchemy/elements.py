@@ -1,4 +1,4 @@
-def create_fire():
+def create_fire() -> str:
     """
     Create a fire element.
 
@@ -8,7 +8,7 @@ def create_fire():
     return "Fire element created"
 
 
-def create_water():
+def create_water() -> str:
     """
     Create a water element.
 
@@ -18,7 +18,7 @@ def create_water():
     return "Water element created"
 
 
-def create_earth():
+def create_earth() -> str:
     """
     Create an earth element.
 
@@ -28,7 +28,7 @@ def create_earth():
     return "Earth element created"
 
 
-def create_air():
+def create_air() -> str:
     """
     Create an air element.
 

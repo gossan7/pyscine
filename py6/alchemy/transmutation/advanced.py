@@ -4,7 +4,7 @@ from .basic import lead_to_gold
 from ..potions import healing_potion
 
 
-def philosophers_stone():
+def philosophers_stone() -> str:
     """
     Create the philosopher's stone.
 
@@ -17,7 +17,7 @@ def philosophers_stone():
             f"using {lead_to_gold()} and {healing_potion()}")
 
 
-def elixir_of_life():
+def elixir_of_life() -> str:
     """
     Create the elixir of life.
 

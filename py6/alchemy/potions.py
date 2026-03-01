@@ -3,7 +3,7 @@
 from .elements import create_fire, create_water, create_air, create_earth
 
 
-def healing_potion():
+def healing_potion() -> str:
     """
     Brew a healing potion.
 
@@ -16,7 +16,7 @@ def healing_potion():
             f"and {create_water()}")
 
 
-def strength_potion():
+def strength_potion() -> str:
     """
     Brew a strength potion.
 
@@ -29,7 +29,7 @@ def strength_potion():
             f"and {create_fire()}")
 
 
-def invisibility_potion():
+def invisibility_potion() -> str:
     """
     Brew an invisibility potion.
 
@@ -42,7 +42,7 @@ def invisibility_potion():
             f"and {create_water()}")
 
 
-def wisdom_potion():
+def wisdom_potion() -> str:
     """
     Brew a wisdom potion.
 
@@ -51,7 +51,7 @@ def wisdom_potion():
     Returns:
         str: Description of the wisdom potion.
     """
-    return f"Wisdom potion brewed with all elements: {create_fire()
-                                                      + create_water()
-                                                      + create_earth()
-                                                      + create_air()}"
+    return "Wisdom potion brewed with all elements: " + create_fire() \
+        + create_water() \
+        + create_earth() \
+        + create_air()

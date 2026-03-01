@@ -11,7 +11,7 @@ def validate_ingredients(ingredients: str) -> str:
     Returns:
         str: Success or error message.
     """
-    valid = ("fire", "water", "earth", "air")
+    valid = {"fire", "water", "earth", "air"}
     split = ingredients.split(" ")
     if any(ing in valid for ing in split):
         return f"{ingredients} VALID"

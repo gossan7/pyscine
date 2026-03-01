@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 
-import alchemy
+import alchemy.elements
 from alchemy.elements import create_water
 from alchemy.potions import healing_potion as heal
 from alchemy.elements import create_earth, create_fire
 from alchemy.potions import strength_potion
 
 
-def main():
+def main() -> None:
     """
     Run the import transmutation demonstration.
 
@@ -38,4 +38,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

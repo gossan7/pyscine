@@ -5,7 +5,7 @@ from alchemy.transmutation.advanced import philosophers_stone, elixir_of_life
 import alchemy
 
 
-def main():
+def main() -> None:
     print("=== Pathway Debate Mastery ===\n")
 
     print("Testing Absolute Imports (from basic.py):")
@@ -28,4 +28,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

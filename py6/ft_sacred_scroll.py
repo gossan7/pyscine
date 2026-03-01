@@ -3,7 +3,7 @@
 import alchemy
 
 
-def main():
+def main() -> None:
     """
     Run the sacred scroll demonstration.
 
@@ -14,29 +14,42 @@ def main():
 
     print("Testing direct module access:")
 
-    print("alchemy.elements.create_fire():",
-          alchemy.elements.create_fire())
+    print(
+        "alchemy.elements.create_fire():",
+        alchemy.elements.create_fire()
+    )
 
-    print("alchemy.elements.create_water():",
-          alchemy.elements.create_water())
+    print(
+        "alchemy.elements.create_water():",
+        alchemy.elements.create_water()
+    )
 
-    print("alchemy.elements.create_earth():",
-          alchemy.elements.create_earth())
+    print(
+        "alchemy.elements.create_earth():",
+        alchemy.elements.create_earth()
+    )
 
-    print("alchemy.elements.create_air():",
-          alchemy.elements.create_air())
+    print(
+        "alchemy.elements.create_air():",
+        alchemy.elements.create_air()
+    )
 
     print()
 
     print("Testing package-level access (controlled by __init__.py):")
 
-    print("alchemy.create_fire():",
-          alchemy.create_fire())
+    print(
+        "alchemy.create_fire():",
+        alchemy.create_fire()
+    )
 
-    print("alchemy.create_water():",
-          alchemy.create_water())
+    print(
+        "alchemy.create_water():",
+        alchemy.create_water()
+    )
 
     print("alchemy.create_earth(): ", end="")
+
     try:
         print(alchemy.create_earth())
     except AttributeError:
@@ -54,4 +67,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
