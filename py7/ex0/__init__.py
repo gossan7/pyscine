@@ -1,7 +1,18 @@
 __version__ = "1.0.0"
 __author__ = "vquetier"
 
-from .Card import Card, CardInfo, GameState, \
-    CardError, Play, Attack  # noqa: F401
+__all__ = [
+    "Card",
+    "CardInfo",
+    "GameState",
+    "CardError",
+    "Play",
+    "Attack",
+    "CreatureCard",
+    "CreatureInfo"
+]
 
-from .CreatureCard import CreatureCard, CreatureInfo  # noqa: F401
+from .Card import Card, CardInfo, GameState, \
+    CardError, Play, Attack
+
+from .CreatureCard import CreatureCard, CreatureInfo

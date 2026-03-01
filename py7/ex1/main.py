@@ -9,7 +9,7 @@ polymorphism through a shared Card interface.
 """
 
 from . import Deck, CreatureCard, SpellCard, ArtifactCard, \
-              CardInfo, SpellInfo, GameState
+    CardInfo, SpellInfo, GameState
 
 
 def main() -> None:
@@ -22,6 +22,7 @@ def main() -> None:
     print("=== DataDeck Deck Builder ===\n")
 
     print("Building deck with different card types...")
+
     deck = Deck()
     game_state = {GameState.AVAILABLE_MANA.value: 10}
 
@@ -65,4 +66,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

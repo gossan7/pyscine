@@ -34,7 +34,7 @@ class ArtifactCard(Card):
     """
 
     def __init__(self, name: str, cost: int, rarity: str,
-                 durability: int, effect: str):
+                 durability: int, effect: str) -> None:
         """
         Initialize a new ArtifactCard.
 

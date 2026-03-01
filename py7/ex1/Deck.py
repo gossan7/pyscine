@@ -37,7 +37,7 @@ class Deck:
     reporting aggregated statistics.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """
         Initialize an empty deck with no cards and default statistics.
         """
@@ -62,9 +62,12 @@ class Deck:
 
         self.stats[DeckInfo.AVG_COST.value] *= \
             self.stats[DeckInfo.TOTAL_CARDS.value]
+
         self.stats[DeckInfo.AVG_COST.value] += \
             card_info[CardInfo.COST.value]
+
         self.stats[DeckInfo.TOTAL_CARDS.value] += 1
+
         self.stats[DeckInfo.AVG_COST.value] /= \
             self.stats[DeckInfo.TOTAL_CARDS.value]
 
@@ -79,14 +82,19 @@ class Deck:
 
         for i, card in enumerate(self.cards):
             card_info = card.get_card_info()
+
             if card_info[CardInfo.NAME.value] == card_name:
+
                 self.stats[DeckInfo.AVG_COST.value] *= \
                     self.stats[DeckInfo.TOTAL_CARDS.value]
+
                 self.stats[DeckInfo.AVG_COST.value] -= \
                     card_info[CardInfo.COST.value]
+
                 self.stats[DeckInfo.TOTAL_CARDS.value] -= 1
 
                 if self.stats[DeckInfo.TOTAL_CARDS.value]:
+
                     self.stats[DeckInfo.AVG_COST.value] /= \
                         self.stats[DeckInfo.TOTAL_CARDS.value]
 

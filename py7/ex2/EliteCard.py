@@ -86,17 +86,22 @@ class EliteCard(Card, Combatable, Magical):
         """
         taken = incoming_damage // 2
         blocked = incoming_damage - taken
-        self.info[EliteInfo.HEALTH.value] -= taken
 
-        if self.info[EliteInfo.HEALTH.value] < 0:
-            self.info[EliteInfo.HEALTH.value] = 0
+        health = self.info[EliteInfo.HEALTH.value]
+        assert isinstance(health, int)
+
+        health -= taken
+
+        if health < 0:
+            health = 0
+
+        self.info[EliteInfo.HEALTH.value] = health
 
         return {
             Combat.DEFENDER.value: self.info[CardInfo.NAME.value],
             Combat.DAMAGE_TAKEN.value: taken,
             Combat.DAMAGE_BLOCKED.value: blocked,
-            Combat.STILL_ALIVE.value:
-                self.info[EliteInfo.HEALTH.value] > 0
+            Combat.STILL_ALIVE.value: health > 0
         }
 
     def cast_spell(self, spell_name: str, targets: List[Dict]) -> Dict:
@@ -108,7 +113,13 @@ class EliteCard(Card, Combatable, Magical):
         :return: Dictionary describing the spell cast
         """
         mana_used = len(targets) * 2
-        self.info[EliteInfo.MANA.value] -= mana_used
+
+        mana = self.info[EliteInfo.MANA.value]
+        assert isinstance(mana, int)
+        mana -= mana_used
+
+        self.info[EliteInfo.MANA.value] = mana
+
         targets_name = []
         for target in targets:
             targets_name.append(target[CardInfo.NAME.value])
@@ -128,10 +139,15 @@ class EliteCard(Card, Combatable, Magical):
         :param amount: Mana to channel
         :return: Dictionary describing mana gain
         """
-        self.info[EliteInfo.MANA.value] += amount
+        mana = self.info[EliteInfo.MANA.value]
+        assert isinstance(mana, int)
+
+        mana += amount
+        self.info[EliteInfo.MANA.value] = mana
+
         return {
             Magic.CHANNELED.value: amount,
-            Magic.TOTAL_MANA.value: self.info[EliteInfo.MANA.value]
+            Magic.TOTAL_MANA.value: mana
         }
 
     def get_combat_stats(self) -> Dict:

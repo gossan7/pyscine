@@ -38,7 +38,7 @@ class SpellCard(Card):
     """
 
     def __init__(self, name: str, cost: int, rarity: str,
-                 effect_type: str):
+                 effect_type: str) -> None:
         """
         Initialize a new SpellCard.
 
@@ -58,13 +58,15 @@ class SpellCard(Card):
         :return: Description string representing the spell effect
         """
         value = self.info[CardInfo.COST.value]
-        effects = {
+        effects: Dict[str, str] = {
             SpellInfo.DAMAGE.value: f"Deal {value} damage to target",
             SpellInfo.HEAL.value: f"Heal {value} damage to target",
             SpellInfo.BUFF.value: f"Give {value} attack point to target",
             SpellInfo.DEBUFF.value: f"Take {value} attack point to target"
         }
-        return effects[self.info[SpellInfo.EFFECT_TYPE.value]]
+        effect_type = self.info[SpellInfo.EFFECT_TYPE.value]
+        assert isinstance(effect_type, str)
+        return effects[effect_type]
 
     def play(self, game_state: Dict) -> Dict:
         """
@@ -106,6 +108,7 @@ class SpellCard(Card):
         elif self.info[SpellInfo.EFFECT_TYPE.value] == SpellInfo.DEBUFF.value:
             target[CreatureInfo.ATTACK.value] -= \
                 self.info[CardInfo.COST.value]
+
             if target[CreatureInfo.ATTACK.value] < 1:
                 target[CreatureInfo.ATTACK.value] = 1
 
@@ -116,16 +119,20 @@ class SpellCard(Card):
         elif self.info[SpellInfo.EFFECT_TYPE.value] == SpellInfo.DAMAGE.value:
             target[CreatureInfo.HEALTH.value] -= \
                 self.info[CardInfo.COST.value]
+
             if target[CreatureInfo.HEALTH.value] < 0:
                 target[CreatureInfo.HEALTH.value] = 0
 
         return {
             Spell.SPELL.value: self.info[CardInfo.NAME.value],
             Spell.TARGET.value: target[CardInfo.NAME.value],
+
             Spell.EFFECT_TYPE.value:
                 self.info[SpellInfo.EFFECT_TYPE.value],
+
             Spell.EFFECT_VALUE.value:
                 self.info[CardInfo.COST.value],
+
             Spell.RESOLVED.value:
                 target[CreatureInfo.HEALTH.value] == 0
         }

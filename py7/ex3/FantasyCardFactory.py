@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Dict
+from typing import Dict, List
 from random import choice
 from . import CreatureCard, SpellCard, ArtifactCard, CardFactory
 
@@ -10,10 +10,15 @@ class FantasyCardFactory(CardFactory):
     Concrete factory creating fantasy-themed cards.
     """
 
-    def __init__(self):
-        self.creatures = ["Dragon", "Goblin"]
-        self.spells = ["Fireball"]
-        self.artifacts = ["Mana Ring"]
+    def __init__(
+            self,
+            creatures: List[str],
+            spells: List[str],
+            artifacts: List[str]
+    ):
+        self.creatures = creatures
+        self.spells = spells
+        self.artifacts = artifacts
 
     def create_creature(self, name_or_power=None):
         name = choice(self.creatures)

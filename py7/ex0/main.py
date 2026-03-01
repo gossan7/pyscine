@@ -1,13 +1,16 @@
+#!/usr/bin/env python3
+
+from typing import Dict, Union
 from ex0 import CreatureCard, CardInfo, GameState
 
 
-def main():
+def main() -> None:
     """Demonstrate the Card Foundation architecture."""
     print("=== DataDeck Card Foundation ===\n")
 
     print("Testing Abstract Base Class Design:\n")
 
-    game_state = {
+    game_state: Dict[str, Union[int, str]] = {
         GameState.AVAILABLE_MANA.value: 6
     }
 
@@ -30,7 +33,9 @@ def main():
     )
     print(
         "Playable:",
-        fire_dragon.is_playable(game_state[GameState.AVAILABLE_MANA.value])
+        fire_dragon.is_playable(
+            int(game_state[GameState.AVAILABLE_MANA.value])
+        )
     )
     print(f"Play result: {fire_dragon.play(game_state)}\n")
 
@@ -54,6 +59,8 @@ def main():
         fire_dragon.attack_target(goblin_warrior.get_card_info(), game_state)
     )
 
+    print()
+
     print(
         "Testing insufficient mana",
         f"({game_state[GameState.AVAILABLE_MANA.value]} available):"
@@ -61,7 +68,9 @@ def main():
 
     print(
         "Playable:",
-        fire_dragon.is_playable(game_state[GameState.AVAILABLE_MANA.value])
+        fire_dragon.is_playable(
+            int(game_state[GameState.AVAILABLE_MANA.value])
+        )
     )
 
     print()
@@ -70,4 +79,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

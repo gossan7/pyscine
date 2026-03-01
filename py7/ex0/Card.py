@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from abc import ABC, abstractmethod
-from typing import Dict
+from typing import Dict, Union
 from enum import Enum
 
 
@@ -43,7 +43,7 @@ class CardError(Exception):
 class Card(ABC):
     """Abstract base class representing a generic card."""
 
-    def __init__(self, name: str, cost: int, rarity: str):
+    def __init__(self, name: str, cost: int, rarity: str) -> None:
         """
         Initialize common card attributes.
 
@@ -51,21 +51,21 @@ class Card(ABC):
         :param cost: Mana cost of the card
         :param rarity: Rarity of the card
         """
-        self.info = {
+        self.info: Dict[str, Union[str, int]] = {
             CardInfo.NAME.value: name,
             CardInfo.COST.value: cost,
             CardInfo.RARITY.value: rarity
         }
 
     @abstractmethod
-    def play(self, game_state: Dict):
+    def play(self, game_state: Dict) -> Dict:
         """
         Play the card using the provided game state.
 
         :param game_state: Current game state
         :return: Dictionary describing the result of the play
         """
-        raise NotImplementedError
+        pass
 
     def get_card_info(self) -> Dict:
         """
@@ -82,4 +82,5 @@ class Card(ABC):
         :param avaliable_mana: Amount of available mana
         :return: True if playable, False otherwise
         """
-        return avaliable_mana >= self.info[CardInfo.COST.value]
+        cost = int(self.info[CardInfo.COST.value])
+        return avaliable_mana >= cost

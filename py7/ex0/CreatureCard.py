@@ -15,7 +15,7 @@ class CreatureCard(Card):
     """Concrete card representing a creature with combat capabilities."""
 
     def __init__(self, name: str, cost: int,
-                 rarity: str, attack: int, health: int):
+                 rarity: str, attack: int, health: int) -> None:
         """
         Initialize a creature card.
 
@@ -70,19 +70,27 @@ class CreatureCard(Card):
         :return: Combat resolution details
         """
         try:
-            target[CreatureInfo.HEALTH.value] \
-                -= self.info[CreatureInfo.ATTACK.value]
+            health = target[CreatureInfo.HEALTH.value]
+            attack = self.info[CreatureInfo.ATTACK.value]
+            assert isinstance(health, int)
+            assert isinstance(attack, int)
+            health -= attack
+            target[CreatureInfo.HEALTH.value] = health
+
         except KeyError:
             raise CardError("Invalid target for attack")
 
-        if target[CreatureInfo.HEALTH.value] <= 0:
+        if health <= 0:
             target[CreatureInfo.HEALTH.value] = 0
-            game_state[GameState.AVAILABLE_MANA.value] += 2
+            available_mana = game_state[GameState.AVAILABLE_MANA.value]
+            assert isinstance(available_mana, int)
+            available_mana += 2
+            game_state[GameState.AVAILABLE_MANA.value] = available_mana
 
         return {
-            Attack.ATTACKER.value: self.infos[CardInfo.NAME.value],
+            Attack.ATTACKER.value: self.info[CardInfo.NAME.value],
             Attack.TARGET.value: target[CardInfo.NAME.value],
-            Attack.DAMAGE_DEALT.value: self.infos[CreatureInfo.ATTACK.value],
+            Attack.DAMAGE_DEALT.value: self.info[CreatureInfo.ATTACK.value],
             Attack.COMBAT_RESOLVED.value:
             target[CreatureInfo.HEALTH.value] == 0
         }
