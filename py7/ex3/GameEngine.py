@@ -1,9 +1,22 @@
-#!/usr/bin/env python3
-
 from typing import Dict, List
+from enum import Enum
+from ex0.Card import Card
+from ex0.CreatureCard import CreatureCard
 from ex3.GameStrategy import GameStrategy, StrategyAction
 from ex3.CardFactory import CardFactory
-from ex3 import Card, CreatureCard
+
+
+class GameReport(Enum):
+    TURN_SIMULATED = "turns_simulated"
+    STRATEGY_USED = "strategy_used"
+    TOTAL_DAMAGE = "total_damage"
+    CARDS_CREATED = "cards_created"
+
+
+class TurnReport(Enum):
+    HAND = "hand"
+    STRATEGY = "strategy"
+    ACTIONS = "actions"
 
 
 class GameEngine:
@@ -44,19 +57,20 @@ class GameEngine:
         ]
 
         self.battle_field = [
-            CreatureCard("Enemy Player", 0, "Common", 2, 10)
+            CreatureCard("Enemy Player", 0, "Common", 2, 8)
         ]
+
+        actions = strategy.execute_turn(hand, self.battle_field)
 
         self.cards_created += len(hand)
 
-        actions = strategy.execute_turn(hand, self.battle_field)
         self.turns_simulated += 1
         self.total_damage += actions[StrategyAction.DAMAGE_DEALT.value]
 
         return {
-            "hand": hand,
-            "strategy": strategy.get_strategy_name(),
-            "actions": actions
+            TurnReport.HAND.value: hand,
+            TurnReport.STRATEGY.value: strategy.get_strategy_name(),
+            TurnReport.ACTIONS.value: actions
         }
 
     def get_engine_status(self) -> Dict:
@@ -67,8 +81,8 @@ class GameEngine:
         assert isinstance(strategy, GameStrategy)
 
         return {
-            "turns_simulated": self.turns_simulated,
-            "strategy_used": strategy.get_strategy_name(),
-            "total_damage": self.total_damage,
-            "cards_created": self.cards_created
+            GameReport.TURN_SIMULATED.value: self.turns_simulated,
+            GameReport.STRATEGY_USED.value: strategy.get_strategy_name(),
+            GameReport.TOTAL_DAMAGE.value: self.total_damage,
+            GameReport.CARDS_CREATED.value: self.cards_created
         }

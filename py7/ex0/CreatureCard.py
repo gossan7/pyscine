@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-
 from typing import Dict, Union
-from . import Card, CardError, CardInfo, GameState, Play, Attack
+from ex0.Card import Card, CardError, CardInfo, GameState, Play, Attack
 from enum import Enum
 
 

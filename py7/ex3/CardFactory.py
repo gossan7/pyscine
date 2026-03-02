@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from abc import ABC, abstractmethod
 from typing import Dict
 from ex0.Card import Card

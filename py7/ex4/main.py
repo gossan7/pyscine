@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from . import TournamentPlatform, TournamentCard
+from ex4.TournamentCard import TournamentCard
+from ex4.TournamentPlatform import TournamentPlatform
 
 
 def main() -> None:
@@ -51,4 +52,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

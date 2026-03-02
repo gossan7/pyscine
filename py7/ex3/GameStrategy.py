@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Dict, List
+from ex0.Card import Card
 
 
 class StrategyAction(Enum):
@@ -21,7 +20,7 @@ class GameStrategy(ABC):
     """
 
     @abstractmethod
-    def execute_turn(self, hand: List, battlefield: List) -> Dict:
+    def execute_turn(self, hand: List[Card], battlefield: List[Card]) -> Dict:
         """
         Execute a full turn using the strategy.
 
@@ -41,7 +40,7 @@ class GameStrategy(ABC):
         pass
 
     @abstractmethod
-    def prioritize_targets(self, available_targets: List) -> List:
+    def prioritize_targets(self, available_targets: List[Card]) -> List:
         """
         Order targets based on strategy priority.
 

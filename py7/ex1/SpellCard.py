@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-
 from enum import Enum
 from typing import Dict
-from . import Card, CardInfo, CardError, Play, GameState, CreatureInfo
+from ex0.Card import Card, CardInfo, CardError, Play, GameState
+from ex0.CreatureCard import CreatureInfo
 
 
 class SpellInfo(Enum):

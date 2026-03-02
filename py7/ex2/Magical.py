@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from abc import ABC, abstractmethod
 from enum import Enum
 from typing import Dict, List

@@ -1,8 +1,9 @@
-#!/usr/bin/env python3
-
 from typing import Dict
 from random import choice
-from . import CreatureCard, SpellCard, ArtifactCard, CardFactory
+from ex0.CreatureCard import CreatureCard
+from ex1.SpellCard import SpellCard
+from ex1.ArtifactCard import ArtifactCard
+from ex3.CardFactory import CardFactory
 
 
 class FantasyCardFactory(CardFactory):
@@ -23,8 +24,8 @@ class FantasyCardFactory(CardFactory):
                 "Goblin Warrior",
                 2,
                 "Common",
-                2,
-                7
+                1,
+                5
             )
         ]
 

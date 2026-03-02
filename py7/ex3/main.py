@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
-from . import GameEngine, AggressiveStrategy, FantasyCardFactory
+from ex3 import GameEngine, AggressiveStrategy, FantasyCardFactory, \
+    TurnReport
+
 from ex0.Card import CardInfo
 
 
@@ -22,16 +24,17 @@ def main() -> None:
 
     turn = engine.simulate_turn()
 
-    hand_str = [
+    hand_str = ", ".join([
         f"{c.get_card_info()[CardInfo.NAME.value]} "
         f"({c.get_card_info()[CardInfo.COST.value]})"
-        for c in turn["hand"]
-    ]
-    print("Hand:", hand_str)
+        for c in turn[TurnReport.HAND.value]
+    ])
+
+    print(f"Hand: [{hand_str}]")
 
     print("\nTurn execution:")
-    print("Strategy:", turn["strategy"])
-    print("Actions:", turn["actions"])
+    print("Strategy:", turn[TurnReport.STRATEGY.value])
+    print("Actions:", turn[TurnReport.ACTIONS.value])
 
     print("\nGame Report:")
     print(engine.get_engine_status())

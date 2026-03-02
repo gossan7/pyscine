@@ -1,9 +1,7 @@
-#!/usr/bin/env python3
-
 from enum import Enum
 from typing import Dict, List
 from random import shuffle
-from . import Card, CardInfo
+from ex0.Card import Card, CardInfo
 
 
 class DeckError(Exception):

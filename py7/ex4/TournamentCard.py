@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 from typing import Dict
 from enum import Enum
 from ex0.Card import Card, CardInfo

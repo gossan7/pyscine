@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-
 from typing import Dict, List
 from enum import Enum
-from . import Card, CardInfo, GameState, CreatureInfo
+from ex0.Card import Card, CardInfo, GameState
+from ex0.CreatureCard import CreatureInfo
 from .Combatable import Combatable, Combat
 from .Magical import Magical, Magic
 

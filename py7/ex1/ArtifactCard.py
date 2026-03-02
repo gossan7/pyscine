@@ -1,8 +1,6 @@
-#!/usr/bin/env python3
-
 from typing import Dict
 from enum import Enum
-from . import Card, CardInfo, CardError, Play, GameState
+from ex0.Card import Card, CardInfo, CardError, Play, GameState
 
 
 class ArtifactInfo(Enum):

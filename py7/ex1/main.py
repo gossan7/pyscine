@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 
-"""
-Demonstration script for Exercise 1: Deck Builder.
+from . import Deck, SpellCard, ArtifactCard, \
+    SpellInfo
 
-This script showcases the use of multiple concrete card types
-(Creature, Spell, Artifact) within a single Deck, demonstrating
-polymorphism through a shared Card interface.
-"""
-
-from . import Deck, CreatureCard, SpellCard, ArtifactCard, \
-    CardInfo, SpellInfo, GameState
+from ex0.Card import CardInfo, GameState
+from ex0.CreatureCard import CreatureCard
 
 
 def main() -> None:

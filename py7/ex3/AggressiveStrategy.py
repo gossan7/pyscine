@@ -1,8 +1,7 @@
-#!/usr/bin/env python3
-
 from typing import Dict, List
+from ex0.Card import Card, CardInfo
+from ex0.CreatureCard import CreatureCard
 from .GameStrategy import GameStrategy, StrategyAction
-from ex3 import CardInfo, Card, CreatureCard
 
 
 class AggressiveStrategy(GameStrategy):
@@ -31,9 +30,20 @@ class AggressiveStrategy(GameStrategy):
         cards_played = []
         damage = 0
         mana_used = 0
-        hand.sort(key=lambda x: x.get_card_info()[CardInfo.COST.value])
+
+        def get_card_cost(card: Card):
+            creature_cost = 1
+            if isinstance(card, CreatureCard):
+                creature_cost = 0
+            cost = card.get_card_info()[CardInfo.COST.value]
+            return (creature_cost, cost)
+
+        hand = hand.copy()
+        hand.sort(key=lambda x: get_card_cost(x))
+
         available_targets = [card for card in battlefield if card not in hand]
         prioritized = self.prioritize_targets(available_targets)
+
         attacked_targets = set()
 
         for card in hand:
@@ -41,7 +51,6 @@ class AggressiveStrategy(GameStrategy):
             attack = cost
             if isinstance(card, CreatureCard):
                 attack = card.get_card_info()[CardInfo.ATTACK.value]
-            cards_played.append(card.get_card_info()[CardInfo.NAME.value])
             enemy = next((
                 enemy_card for enemy_card in prioritized
                 if enemy_card.get_card_info()[CardInfo.HEALTH.value] > 0),
@@ -51,11 +60,16 @@ class AggressiveStrategy(GameStrategy):
             if enemy is None:
                 break
 
+            cards_played.append(card.get_card_info()[CardInfo.NAME.value])
+
             attacked_targets.add(
                 enemy.get_card_info()[CardInfo.NAME.value]
             )
 
             enemy.get_card_info()[CardInfo.HEALTH.value] -= attack
+
+            if enemy.get_card_info()[CardInfo.HEALTH.value] < 0:
+                attack += enemy.get_card_info()[CardInfo.HEALTH.value]
 
             mana_used += cost
             damage += attack

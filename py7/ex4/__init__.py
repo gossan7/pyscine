@@ -1,5 +1,12 @@
-#!/usr/bin/env python3
+__version__ = "1.0.0"
+__author__ = "vquetier"
 
-from .Rankable import Rankable          # noqa: F401
-from .TournamentCard import TournamentCard  # noqa: F401
-from .TournamentPlatform import TournamentPlatform  # noqa: F401
+__all__ = [
+    "Rankable",
+    "TournamentCard",
+    "TournamentPlatform"
+]
+
+from .Rankable import Rankable
+from .TournamentCard import TournamentCard
+from .TournamentPlatform import TournamentPlatform
