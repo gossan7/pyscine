@@ -1,5 +1,21 @@
 from typing import Dict, List
-from .TournamentCard import TournamentCard
+from enum import Enum
+from ex2.Combatable import Combat
+from ex4.TournamentCard import TournamentCard, TournamentInfo
+
+
+class TournamentResult(Enum):
+    WINNER = "winner"
+    LOSER = "loser"
+    WINNER_RATING = "winner_rating"
+    LOSER_RATING = "loser_rating"
+
+
+class TournamentReport(Enum):
+    TOTAL_CARDS = "total_cards"
+    MATCHES_PLAYED = "matches_played"
+    AVG_RATING = "avg_rating"
+    PLATFORM_STATUS = "platform_status"
 
 
 class TournamentPlatform:
@@ -7,7 +23,7 @@ class TournamentPlatform:
     Platform managing tournament cards and matches.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.cards: Dict[str, TournamentCard] = {}
         self.matches_played = 0
 
@@ -15,8 +31,10 @@ class TournamentPlatform:
         """
         Register a tournament card.
         """
-        self.cards[card.card_id] = card
-        return card.card_id
+        id = card.info[TournamentInfo.CARD_ID.value]
+        assert isinstance(id, str)
+        self.cards[id] = card
+        return id
 
     def create_match(self, card1_id: str, card2_id: str) -> Dict:
         """
@@ -27,28 +45,47 @@ class TournamentPlatform:
 
         self.matches_played += 1
 
-        if card1.attack_points >= card2.attack_points:
-            winner, loser = card1, card2
-        else:
-            winner, loser = card2, card1
+        card1_alive = True
+        card2_alive = True
 
-        winner.update_wins(1)
-        loser.update_losses(1)
+        while card1_alive and card2_alive:
+            res = card1.attack(card2.info)
+            card2_alive = res[Combat.STILL_ALIVE.value]
+            res = card2.attack(card1.info)
+            card1_alive = res[Combat.STILL_ALIVE.value]
+
+        if not card2_alive:
+            card1.update_wins(1)
+            card2.update_losses(1)
+
+            winner_id = card1_id
+            loser_id = card2_id
+            winner_rating = card1.info[TournamentInfo.RATING.value]
+            loser_rating = card2.info[TournamentInfo.RATING.value]
+
+        else:
+            card2.update_wins(1)
+            card1.update_losses(1)
+
+            winner_id = card1_id
+            loser_id = card2_id
+            winner_rating = card1.info[TournamentInfo.RATING.value]
+            loser_rating = card2.info[TournamentInfo.RATING.value]
 
         return {
-            "winner": winner.card_id,
-            "loser": loser.card_id,
-            "winner_rating": winner.rating,
-            "loser_rating": loser.rating
+            TournamentResult.WINNER.value: winner_id,
+            TournamentResult.LOSER.value: loser_id,
+            TournamentResult.WINNER_RATING.value: winner_rating,
+            TournamentResult.LOSER_RATING.value: loser_rating
         }
 
-    def get_leaderboard(self) -> List:
+    def get_leaderboard(self) -> List[TournamentCard]:
         """
         Return cards ordered by rating.
         """
         return sorted(
             self.cards.values(),
-            key=lambda c: c.rating,
+            key=lambda c: c.info[TournamentInfo.RATING.value],
             reverse=True
         )
 
@@ -56,12 +93,16 @@ class TournamentPlatform:
         """
         Generate platform statistics.
         """
-        avg_rating = sum(c.rating for c in self.cards.values()) \
-            // len(self.cards)
+        ratings = [
+            int(c.info[TournamentInfo.RATING.value])
+            for c in self.cards.values()
+        ]
+
+        avg_rating = round(sum(ratings) / len(self.cards))
 
         return {
-            "total_cards": len(self.cards),
-            "matches_played": self.matches_played,
-            "avg_rating": avg_rating,
-            "platform_status": "active"
+            TournamentReport.TOTAL_CARDS.value: len(self.cards),
+            TournamentReport.MATCHES_PLAYED.value: self.matches_played,
+            TournamentReport.AVG_RATING.value: avg_rating,
+            TournamentReport.PLATFORM_STATUS.value: "active"
         }

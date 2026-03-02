@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-from ex4.TournamentCard import TournamentCard
+from ex0.Card import CardInfo
+from ex4.TournamentCard import TournamentCard, TournamentInfo
 from ex4.TournamentPlatform import TournamentPlatform
 
 
@@ -22,11 +23,14 @@ def main() -> None:
     platform.register_card(wizard)
 
     for card in (dragon, wizard):
-        info = card.get_rank_info()
-        print(f"{card.info['name']} (ID: {card.card_id}):")
+        info = card.info
+        card_id = info[TournamentInfo.CARD_ID.value]
+        wins = info[TournamentInfo.WINS.value]
+        losses = info[TournamentInfo.LOSSES.value]
+        print(f"{card.info[CardInfo.NAME.value]} (ID: {card_id}):")
         print("- Interfaces: [Card, Combatable, Rankable]")
-        print(f"- Rating: {info['rating']}")
-        print(f"- Record: {info['wins']}-{info['losses']}\n")
+        print(f"- Rating: {info[TournamentInfo.RATING.value]}")
+        print(f"- Record: {wins}-{losses}\n")
 
     print("Creating tournament match...")
 
@@ -36,11 +40,18 @@ def main() -> None:
 
     print("Tournament Leaderboard:")
     leaderboard = platform.get_leaderboard()
-    for i, card in enumerate(leaderboard, 1):
+    for i, card in enumerate(leaderboard):
+        info = card.info
+        wins = info[TournamentInfo.WINS.value]
+        losses = info[TournamentInfo.LOSSES.value]
+        name = card.info[CardInfo.NAME.value]
+        rating = info[TournamentInfo.RATING.value]
+
         print(
-            f"{i}. {card.info['name']} - Rating: {card.rating} "
-            f"({card.wins}-{card.losses})"
+            f"{i + 1}. {name} - Rating: {rating} "
+            f"({wins}-{losses})"
         )
+
     print()
 
     print("Platform Report:")

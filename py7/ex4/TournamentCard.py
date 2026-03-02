@@ -1,8 +1,8 @@
 from typing import Dict
 from enum import Enum
-from ex0.Card import Card, CardInfo
-from ex2.Combatable import Combatable
-from .Rankable import Rankable
+from ex0.Card import Card, CardInfo, CardError, GameState, Play
+from ex2.Combatable import Combatable, Combat
+from ex4.Rankable import Rankable
 
 
 class TournamentInfo(Enum):
@@ -12,6 +12,10 @@ class TournamentInfo(Enum):
     WINS = "wins"
     LOSSES = "losses"
     RATING = "rating"
+    ATTACK = "attack"
+    HEALTH = "health"
+    MANA = "mana"
+    CARD_ID = "id"
 
 
 class TournamentCard(Card, Combatable, Rankable):
@@ -20,55 +24,84 @@ class TournamentCard(Card, Combatable, Rankable):
     for tournament play.
     """
 
-    def __init__(self, card_id: str, name: str, cost: int,
-                 rarity: str, attack: int, health: int,
-                 rating: int = 1200):
+    def __init__(
+        self,
+        card_id: str,
+        name: str,
+        cost: int,
+        rarity: str,
+        attack: int,
+        health: int,
+        rating: int
+    ) -> None:
         super().__init__(name, cost, rarity)
-        self.card_id = card_id
         self.info[CardInfo.TYPE.value] = "Tournament"
-
-        self.attack_points = attack
-        self.health_points = health
-
-        self.wins = 0
-        self.losses = 0
-        self.rating = rating
+        self.info[CardInfo.ATTACK.value] = attack
+        self.info[CardInfo.HEALTH.value] = health
+        self.info[TournamentInfo.WINS.value] = 0
+        self.info[TournamentInfo.LOSSES.value] = 0
+        self.info[TournamentInfo.RATING.value] = rating
+        self.info[TournamentInfo.CARD_ID.value] = card_id
 
     def play(self, game_state: Dict) -> Dict:
         """
-        Tournament cards do not consume mana during matches.
+        Play the tournament card
         """
+        try:
+            available_mana = game_state[GameState.AVAILABLE_MANA.value]
+        except KeyError:
+            raise CardError("Game state missing available mana")
+
+        if not self.is_playable(available_mana):
+            raise CardError("Not enough mana available")
+
+        game_state[GameState.AVAILABLE_MANA.value] \
+            -= self.info[CardInfo.COST.value]
+
         return {
-            "card_played": self.info[CardInfo.NAME.value],
-            "mode": "tournament"
+            Play.CARD_PLAYED.value: self.info[CardInfo.NAME.value],
+            Play.MANA_USED.value: self.info[CardInfo.COST.value],
         }
 
     def attack(self, target: Dict) -> Dict:
         """
         Attack another card using its card info dictionary.
         """
-        target_health = target["health"] - self.attack_points
-        target["health"] = max(0, target_health)
+
+        attack = self.info[CardInfo.ATTACK.value]
+        target_health = target[CardInfo.HEALTH.value] - attack
+
+        if target_health < 0:
+            attack += target_health
+
+        target[CardInfo.HEALTH.value] = max(0, target_health)
+        still_alive = target[CardInfo.HEALTH.value] > 0
 
         return {
-            "attacker": self.info[CardInfo.NAME.value],
-            "target": target["name"],
-            "damage": self.attack_points
+            Combat.ATTACKER.value: self.info[CardInfo.NAME.value],
+            Combat.TARGET.value: target["name"],
+            Combat.DAMAGE.value: attack,
+            Combat.STILL_ALIVE.value: still_alive
         }
 
     def defend(self, incoming_damage: int) -> Dict:
         """
         Defend against incoming damage.
         """
+        health = self.info[CardInfo.HEALTH.value]
+        assert isinstance(health, int)
+
         blocked = incoming_damage // 2
         taken = incoming_damage - blocked
-        self.health_points -= taken
+        health -= taken
+
+        self.info[CardInfo.HEALTH.value] = health
 
         return {
-            "defender": self.info[CardInfo.NAME.value],
-            "damage_taken": taken,
-            "damage_blocked": blocked,
-            "still_alive": self.health_points > 0
+            Combat.DEFENDER.value: self.info[CardInfo.NAME.value],
+            Combat.DAMAGE_TAKEN.value: taken,
+            Combat.DAMAGE_BLOCKED.value: blocked,
+            Combat.STILL_ALIVE.value: health > 0
         }
 
     def get_combat_stats(self) -> Dict:
@@ -76,32 +109,57 @@ class TournamentCard(Card, Combatable, Rankable):
         Return combat statistics.
         """
         return {
-            "attack": self.attack_points,
-            "health": self.health_points
+            CardInfo.ATTACK.value: self.info[CardInfo.ATTACK.value],
+            CardInfo.HEALTH.value: self.info[CardInfo.HEALTH.value]
         }
 
     def calculate_rating(self) -> int:
         """
         Simple ELO-like rating calculation.
         """
-        return self.rating
+        rating = self.info[TournamentInfo.RATING.value]
+        assert isinstance(rating, int)
+        return rating
 
     def update_wins(self, wins: int) -> None:
-        self.wins += wins
-        self.rating += 16 * wins
+        rating = self.info[TournamentInfo.RATING.value]
+        curr_wins = self.info[TournamentInfo.WINS.value]
+
+        assert isinstance(rating, int)
+        assert isinstance(curr_wins, int)
+
+        rating += wins * 16
+        curr_wins += wins
+
+        self.info[TournamentInfo.WINS.value] = curr_wins
+        self.info[TournamentInfo.RATING.value] = rating
 
     def update_losses(self, losses: int) -> None:
-        self.losses += losses
-        self.rating -= 16 * losses
+        rating = self.info[TournamentInfo.RATING.value]
+        curr_losses = self.info[TournamentInfo.LOSSES.value]
+
+        assert isinstance(rating, int)
+        assert isinstance(curr_losses, int)
+
+        rating -= losses * 16
+        curr_losses += losses
+
+        self.info[TournamentInfo.LOSSES.value] = curr_losses
+        self.info[TournamentInfo.RATING.value] = rating
 
     def get_rank_info(self) -> Dict:
         """
         Return ranking statistics.
         """
         return {
-            TournamentInfo.WINS.value: self.wins,
-            TournamentInfo.LOSSES.value: self.losses,
-            TournamentInfo.RATING.value: self.rating
+            TournamentInfo.WINS.value:
+            self.info[TournamentInfo.WINS.value],
+
+            TournamentInfo.LOSSES.value:
+            self.info[TournamentInfo.LOSSES.value],
+
+            TournamentInfo.RATING.value:
+            self.info[TournamentInfo.RATING.value]
         }
 
     def get_tournament_stats(self) -> Dict:
@@ -109,9 +167,18 @@ class TournamentCard(Card, Combatable, Rankable):
         Return full tournament statistics.
         """
         return {
-            "id": self.card_id,
-            "name": self.info[CardInfo.NAME.value],
-            "wins": self.wins,
-            "losses": self.losses,
-            "rating": self.rating
+            CardInfo.NAME.value:
+            self.info[CardInfo.NAME.value],
+
+            TournamentInfo.CARD_ID.value:
+            self.info[TournamentInfo.CARD_ID.value],
+
+            TournamentInfo.WINS.value:
+            self.info[TournamentInfo.WINS.value],
+
+            TournamentInfo.LOSSES.value:
+            self.info[TournamentInfo.LOSSES.value],
+
+            TournamentInfo.RATING.value:
+            self.info[TournamentInfo.RATING.value]
         }
