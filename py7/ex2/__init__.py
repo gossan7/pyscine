@@ -13,4 +13,5 @@ __all__ = [
 
 from ex1 import Card, CardInfo, CardError, CreatureCard, \
     CreatureInfo, GameState
+
 from .EliteCard import EliteCard

@@ -22,7 +22,6 @@ def main() -> None:
 
     turn = engine.simulate_turn()
 
-    # Print hand
     hand_str = [
         f"{c.get_card_info()[CardInfo.NAME.value]} "
         f"({c.get_card_info()[CardInfo.COST.value]})"
@@ -42,4 +41,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

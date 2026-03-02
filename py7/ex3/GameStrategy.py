@@ -5,12 +5,14 @@ from enum import Enum
 from typing import Dict, List
 
 
-class StrategyResult(Enum):
+class StrategyAction(Enum):
     """
-    Keys used in strategy execution results.
+    Keys used for strategy strategy actions.
     """
-    STRATEGY = "strategy"
-    ACTIONS = "actions"
+    CARDS_PLAYED = "cards_played"
+    MANA_USED = "mana_used"
+    TARGETS_ATTACKED = "targets_attacked"
+    DAMAGE_DEALT = "damage_dealt"
 
 
 class GameStrategy(ABC):
