@@ -3,11 +3,40 @@ import os
 import site
 
 
-def in_virtualenv():
+def in_virtualenv() -> bool:
+    """
+    Determine whether the current Python interpreter is running
+    inside a virtual environment.
+
+    Returns:
+        bool: True if a virtual environment is active, False otherwise.
+
+    This function compares sys.prefix (the active environment prefix)
+    with sys.base_prefix (the base Python installation prefix).
+    If they differ, a virtual environment is assumed to be active.
+    """
     return sys.prefix != sys.base_prefix
 
 
-def main():
+def main() -> None:
+    """
+    Entry point for the script.
+
+    This function checks whether the script is running inside a
+    Python virtual environment and prints diagnostic information
+    about the current execution context.
+
+    Behavior:
+        - If no virtual environment is detected, it prints warnings
+          and instructions for creating and activating one.
+        - If a virtual environment is detected, it prints details
+          about the environment, including its name, path, and
+          site-packages directory.
+
+    Raises:
+        Any exception raised during execution will propagate to the
+        caller and is expected to be handled by the top-level guard.
+    """
     python_path = sys.executable
 
     if not in_virtualenv():
@@ -38,4 +67,14 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    """
+    Script execution guard.
+
+    Ensures that main() is only executed when the file is run
+    directly, not when imported as a module. Any unhandled
+    exception is caught and reported to stdout.
+    """
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

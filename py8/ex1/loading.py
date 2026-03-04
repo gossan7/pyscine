@@ -1,5 +1,7 @@
 import sys
 import importlib
+from typing import Dict
+from types import ModuleType
 
 
 REQUIRED_PACKAGES = [
@@ -9,7 +11,25 @@ REQUIRED_PACKAGES = [
 ]
 
 
-def check_dependencies():
+def check_dependencies() -> Dict[str, ModuleType] | None:
+    """
+    Verify that all required third-party packages are installed
+    and importable.
+
+    This function attempts to import each package listed in
+    REQUIRED_PACKAGES and reports its availability and version.
+    Successfully imported modules are collected and returned.
+
+    Returns:
+        dict | None:
+            - A dictionary mapping package names to imported modules
+              if all dependencies are available.
+            - None if one or more dependencies are missing.
+
+    Side Effects:
+        Prints status messages to stdout indicating which packages
+        are available or missing.
+    """
     print("LOADING STATUS: Loading programs...\n")
     print("Checking dependencies:")
 
@@ -34,7 +54,31 @@ def check_dependencies():
     return None if failed else loaded
 
 
-def analyze_data(pandas, numpy, matplotlib):
+def analyze_data(
+        pandas: ModuleType,
+        numpy: ModuleType,
+        matplotlib: ModuleType
+) -> None:
+    """
+    Generate synthetic data, perform basic analysis, and
+    produce a visualization.
+
+    This function:
+        - Creates a normally distributed random signal
+        - Computes a rolling mean over the signal
+        - Plots the raw signal and rolling mean
+        - Saves the resulting plot to disk
+
+    Args:
+        pandas: The pandas module used for data manipulation.
+        numpy: The numpy module used for numerical computations.
+        matplotlib: The matplotlib.pyplot module used for plotting.
+
+    Side Effects:
+        Writes an image file named 'matrix_analysis.png' to the
+        current working directory and prints progress messages
+        to stdout.
+    """
     print("Analyzing Matrix data...")
 
     data = numpy.random.normal(loc=0, scale=1, size=1000)
@@ -57,7 +101,14 @@ def analyze_data(pandas, numpy, matplotlib):
     print("Results saved to: matrix_analysis.png")
 
 
-def main():
+def main() -> None:
+    """
+    Script entry point.
+
+    This function checks for required dependencies and, if all
+    are available, runs the data analysis workflow. The program
+    exits with a non-zero status code if dependencies are missing.
+    """
     deps = check_dependencies()
     if deps is None:
         sys.exit(1)
@@ -70,4 +121,13 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    """
+    Execution guard.
+
+    Ensures the script runs only when executed directly and not
+    when imported as a module.
+    """
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
