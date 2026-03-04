@@ -16,7 +16,19 @@ class SpaceStation(BaseModel):
     notes: Optional[str] = Field(default=None, max_length=200)
 
 
-def main():
+def main() -> None:
+    """
+    Demonstrates the creation and validation of
+    SpaceStation instances using Pydantic.
+
+    - Creates a valid SpaceStation object and prints its details.
+    - Attempts to create an invalid SpaceStation object to trigger a
+    validation error.
+    - Catches and displays the validation error message.
+
+    This function showcases Pydantic's data validation capabilities, including
+    type enforcement, value constraints, and optional fields.
+    """
     print("Space Station Data Validation")
     print("========================================")
 
@@ -54,4 +66,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
