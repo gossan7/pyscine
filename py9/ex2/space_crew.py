@@ -3,7 +3,6 @@
 from enum import Enum
 from typing import List
 from datetime import datetime
-
 from pydantic import BaseModel, Field, ValidationError, model_validator
 
 
@@ -37,6 +36,23 @@ class SpaceMission(BaseModel):
 
     @model_validator(mode="after")
     def check_mission_rules(self):
+        """
+    Validates mission-specific business rules after model initialization.
+
+    Rules enforced:
+    1. The mission_id must start with 'M'.
+    2. The crew must include at least one member with rank CAPTAIN
+    or COMMANDER.
+    3. For missions longer than 365 days, at least 50% of the crew must have
+       5 or more years of experience.
+    4. All crew members must be active.
+
+    Raises:
+        ValueError: If any of the rules are violated.
+
+    Returns:
+        SpaceMission: The validated instance if all rules pass.
+    """
         if not self.mission_id.startswith("M"):
             raise ValueError("Mission ID must start with 'M'")
 
@@ -63,7 +79,27 @@ class SpaceMission(BaseModel):
         return self
 
 
-def main():
+def main() -> None:
+    """
+    Demonstrates the creation and validation of SpaceMission instances
+    with crew members using Pydantic.
+
+    - Creates a valid SpaceMission object including a list of CrewMember
+    objects and prints its details.
+    - Attempts to create an invalid SpaceMission object to trigger
+    validation errors.
+    - Displays error messages for expected validation failures.
+
+    This function illustrates Pydantic's validation features, including:
+    - Field constraints (min/max lengths, numeric ranges)
+    - Enum validation for crew ranks
+    - List constraints (crew size)
+    - Custom model validation rules via `@model_validator`, e.g.:
+        * Mission ID must start with 'M'
+        * Mission must include at least one Captain or Commander
+        * Long missions require at least 50% experienced crew
+        * All crew members must be active
+    """
     print("Space Mission Crew Validation")
     print("=========================================")
 
@@ -147,4 +183,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")

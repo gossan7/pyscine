@@ -26,6 +26,23 @@ class AlienContact(BaseModel):
 
     @model_validator(mode='after')
     def check_rules(self):
+        """
+        Validates business rules for an AlienContact instance
+        after model initialization.
+
+        Rules enforced:
+        1. contact_id must start with "AC".
+        2. Physical contacts must be verified (is_verified=True).
+        3. Telepathic contacts require at least 3 witnesses.
+        4. Strong signals (signal_strength > 7.0) must include a
+        received message.
+
+        Raises:
+            ValueError: If any of the above rules are violated.
+
+        Returns:
+            AlienContact: The validated instance if all rules pass.
+        """
         if not self.contact_id[:2] == "AC":
             raise ValueError("Contact ID must start with \"AC\"")
         if self.contact_type == ContactType.PHYSICAL \
@@ -35,15 +52,32 @@ class AlienContact(BaseModel):
                 and self.witness_count < 3:
             raise ValueError(
                 "Telepathic contact requires at least 3 witnesses"
-                )
+            )
         if self.signal_strength > 7.0 and self.message_received is None:
             raise ValueError(
                 "Strong signals (> 7.0) should include received messages"
-                )
+            )
         return self
 
 
 def main():
+    """
+    Demonstrates the creation and validation of AlienContact instances
+    using Pydantic.
+
+    - Creates a valid AlienContact object and prints its details.
+    - Attempts to create an invalid AlienContact object to trigger
+    validation errors.
+    - Displays error messages for expected validation failures.
+
+    This function showcases Pydantic's validation capabilities, including:
+    - Enum field enforcement (ContactType)
+    - Value constraints on numeric fields (signal_strength,
+    duration_minutes, witness_count)
+    - Custom model validation rules implemented via `@model_validator`
+      (e.g., contact ID format, verification requirements,
+      message requirements).
+    """
     print("Alien Contact Log Validation")
     print("======================================")
 
@@ -91,4 +125,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as e:
+        print(f"An unexpected exception occurred ({e})")
