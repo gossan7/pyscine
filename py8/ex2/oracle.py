@@ -13,6 +13,17 @@ CONFIG_VARS = [
 
 
 def load_config() -> Dict[str, str | None]:
+    """
+    Load the configuration variables from the environment.
+
+    For each variable listed in CONFIG_VARS:
+    - Attempts to read it from os.environ.
+    - If not set, prints a warning and assigns None.
+
+    Returns:
+        Dict[str, str | None]: A dictionary mapping variable names to their
+        values (or None if not set).
+    """
     config = {}
     for var in CONFIG_VARS:
         value = os.environ.get(var)
@@ -25,6 +36,22 @@ def load_config() -> Dict[str, str | None]:
 
 def check_security(config: Dict[str, str | None],
                    env_vars: Dict[str, str | None]) -> None:
+    """
+    Perform a basic security and configuration check.
+
+    Checks include:
+    - Detection of missing configuration variables.
+    - Detection of overrides between .env values and existing
+    environment variables.
+    - Prints summary messages for each check.
+
+    Args:
+        config (Dict[str, str | None]): Configuration loaded from
+        the environment.
+
+        env_vars (Dict[str, str | None]): Variables loaded directly
+        from the .env file.
+    """
     print("Environment security check:")
 
     print("[OK] No hardcoded secrets detected")
@@ -54,6 +81,15 @@ def check_security(config: Dict[str, str | None],
 
 
 def main() -> None:
+    """
+    Main entry point of the script.
+
+    - Loads environment variables from the .env file.
+    - Loads configuration from the current environment.
+    - Prints a summary of configuration status.
+    - Performs a security/configuration check.
+    - Handles missing .env file gracefully.
+    """
     print("ORACLE STATUS: Reading the Matrix...\n")
     try:
         env_vars = dotenv_values(".env")

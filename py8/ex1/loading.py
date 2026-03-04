@@ -121,12 +121,6 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    """
-    Execution guard.
-
-    Ensures the script runs only when executed directly and not
-    when imported as a module.
-    """
     try:
         main()
     except Exception as e:
